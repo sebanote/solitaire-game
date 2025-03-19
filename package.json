@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests --coverage",
+    "test": "jest --coverage",
     "lint": "npx eslint src/**",
     "prepare": "husky"
   },
