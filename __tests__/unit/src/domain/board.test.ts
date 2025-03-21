@@ -1,4 +1,4 @@
-import { Board } from "../../../../src/domain/board";
+import { Board } from "../../../../src/domain/entities/board";
 
 
 describe('Board class', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { Slot } from "../../../../src/domain/slots";
+import { Slot } from "../../../../src/domain/entities/slots";
 
 describe("Class slot", () => {
 
