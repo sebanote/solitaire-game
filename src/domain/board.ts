@@ -10,4 +10,5 @@ export class Board {
         }
     }
     slots: Array<Slot> = [];
+
 }

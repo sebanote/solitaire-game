@@ -4,22 +4,25 @@ export class Slot {
         this.position_y = y;
     }
 
-    position_x: number;
-    position_y: number;
-    isEmpty: boolean = true;
+    private position_x: number;
+    private position_y: number;
+    private isEmpty: boolean = true;
 
 
-    getSlotPositionX() {
+    get getSlotPositionX() {
         return this.position_x
     };
 
-    getSlotPositionY() {
+    get getSlotPositionY() {
         return this.position_y
     };
 
-    setFull() {
-        this.isEmpty = false;
+    get isEmptyStatus() {
+        return this.isEmpty;
     }
-    
+
+    set setFull(status: boolean) {
+        this.isEmpty = status;
+    }
 }
 

@@ -12,15 +12,15 @@ describe("Class slot", () => {
 
         const testSlot = new Slot(1,2);
 
-        expect(testSlot.position_x).toEqual(1);
-        expect(testSlot.position_y).toEqual(2);
+        expect(testSlot.getSlotPositionX).toEqual(1);
+        expect(testSlot.getSlotPositionY).toEqual(2);
 
     })
 
     test("get slot position x", () => {
 
         const testSlot = new Slot(1,2);
-        const slotPositionX = testSlot.getSlotPositionX();
+        const slotPositionX = testSlot.getSlotPositionX;
 
         expect(slotPositionX).toEqual(1);
 
@@ -29,7 +29,7 @@ describe("Class slot", () => {
     test("get slot position y", () => {
 
         const testSlot = new Slot(1,2);
-        const slotPositionY = testSlot.getSlotPositionY();
+        const slotPositionY = testSlot.getSlotPositionY;
 
         expect(slotPositionY).toEqual(2);
 
@@ -39,9 +39,9 @@ describe("Class slot", () => {
 
         const testSlot = new Slot(1,2);
 
-        testSlot.setFull();
+        testSlot.setFull = false;
         
-        expect(testSlot.isEmpty).toBeFalsy();
+        expect(testSlot.isEmptyStatus).toBeFalsy();
 
     })
 
