@@ -6,6 +6,7 @@ export class Slot {
 
     position_x: number;
     position_y: number;
+    isEmpty: boolean = true;
 
 
     getSlotPositionX() {
@@ -15,5 +16,10 @@ export class Slot {
     getSlotPositionY() {
         return this.position_y
     };
+
+    setFull() {
+        this.isEmpty = false;
+    }
+    
 }
 

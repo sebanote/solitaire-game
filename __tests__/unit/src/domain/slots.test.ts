@@ -8,7 +8,7 @@ describe("Class slot", () => {
         return testSlot;
     })
 
-    test("new slot instance with position 1, 2", () => {
+    test("create new slot instance with position 1, 2", () => {
 
         const testSlot = new Slot(1,2);
 
@@ -34,4 +34,15 @@ describe("Class slot", () => {
         expect(slotPositionY).toEqual(2);
 
     })
+
+    test("set slot as full", () => {
+
+        const testSlot = new Slot(1,2);
+
+        testSlot.setFull();
+        
+        expect(testSlot.isEmpty).toBeFalsy();
+
+    })
+
 })
