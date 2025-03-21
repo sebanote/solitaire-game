@@ -15,17 +15,24 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "lint": "npx eslint src/**",
     "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
+    "@jest/globals": "^29.7.0",
+    "@types/jest": "^29.5.14",
     "eslint": "^9.22.0",
     "eslint-plugin-react": "^7.37.4",
     "globals": "^16.0.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
     "typescript-eslint": "^8.26.1"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
