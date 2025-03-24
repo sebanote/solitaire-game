@@ -1,13 +1,15 @@
 import { Board } from "../../../../src/domain/entities/board";
-import { notPlayableSlot, PlayableSlot } from "../../../../src/domain/entities/slots";
+import { Slots, PlayableSlot } from "../../../../src/domain/entities/slots";
 
 jest.mock("../../../../src/domain/entities/slots", () => {
     return {
-        notPlayableSlot: jest.fn().mockImplementation(() => {
+        Slots: jest.fn().mockImplementation(() => {
+            console.log("mocked not plalable slots slot")
         return {
         }
       }),
         PlayableSlot: jest.fn().mockImplementation(() => {
+            console.log("mocked playable slot")
         return {
         }
       })
@@ -20,7 +22,6 @@ beforeEach(() => {
 
 describe('Board class', () => {
 
-
     test('Create a new Board with 81 slots', () => {
         const testBoard = new Board(9,9);
 
@@ -31,7 +32,7 @@ describe('Board class', () => {
 
         console.log(testBoard)
 
-        expect(notPlayableSlot).toHaveBeenCalledTimes(9);
+        expect(Slots).toHaveBeenCalledTimes(9);
         expect(PlayableSlot).toHaveBeenCalledTimes(3);
         //expect(testBoard.slots[5].position_y).toEqual(1);
         //expect(testBoard.slots[3]).toBeInstanceOf(PlayableSlot);

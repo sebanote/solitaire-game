@@ -1,23 +1,29 @@
-import { Slots } from '../interfaces/interfaces'
+export class Slots {
 
-export class PlayableSlot implements Slots {
     constructor(x: number, y: number){
         this.position_x = x;
         this.position_y = y;
     }
 
-    position_x: number;
-    position_y: number;
-    private isEmpty: boolean = true;
-
+    protected position_x : number;
+    protected position_y : number;
 
     get getSlotPositionX() {
-        return this.position_x
+        return this.position_x;
     };
 
     get getSlotPositionY() {
-        return this.position_y
+        return this.position_y;
     };
+}
+
+export class PlayableSlot extends Slots {
+    constructor(x: number, y: number){
+        super(x, y);
+        this.isEmpty = true;
+    }
+
+    private isEmpty: boolean;
 
     get isEmptyStatus() {
         return this.isEmpty;
@@ -28,21 +34,4 @@ export class PlayableSlot implements Slots {
     }
 }
 
-export class notPlayableSlot implements Slots {
-    constructor(x: number, y: number){
-        this.position_x = x;
-        this.position_y = y;
-    }
-
-    position_x: number;
-    position_y: number;
-
-    get getSlotPositionX() {
-        return this.position_x
-    };
-
-    get getSlotPositionY() {
-        return this.position_y
-    };
-}
 
