@@ -3,15 +3,11 @@ import { Slots, PlayableSlot } from "../../../../src/domain/entities/slots";
 
 jest.mock("../../../../src/domain/entities/slots", () => {
     return {
-        Slots: jest.fn().mockImplementation(() => {
-            console.log("mocked not plalable slots slot")
-        return {
-        }
+        Slots: jest.fn().mockImplementation((x,y) => {
+        return {}
       }),
-        PlayableSlot: jest.fn().mockImplementation(() => {
-            console.log("mocked playable slot")
-        return {
-        }
+        PlayableSlot: jest.fn().mockImplementation((x, y, status) => {
+        return {}
       })
     };
   });
@@ -26,7 +22,8 @@ describe('Board class', () => {
         const testBoard = new Board(9,9);
 
         expect(testBoard.slots.length).toEqual(81);
-    })
+        expect(Slots).toHaveBeenCalledTimes(81);
+    });
     test('Create a new Board with 9 slots, 3 of them should be playable', () => {
         const testBoard = new Board(3,3,[null, null, null, true, false, true, null, null, null]);
 
@@ -34,8 +31,22 @@ describe('Board class', () => {
 
         expect(Slots).toHaveBeenCalledTimes(9);
         expect(PlayableSlot).toHaveBeenCalledTimes(3);
-        //expect(testBoard.slots[5].position_y).toEqual(1);
-        //expect(testBoard.slots[3]).toBeInstanceOf(PlayableSlot);
-        //expect(testBoard.slots[3].isEmptyStatus()).toBeFalsy();
-    })
+        expect(testBoard.slots.length).toEqual(9);
+    });
+    test('Create a new board with just one slot that is playable', () => {
+
+        const testBoard = new Board(1,1, [true]);
+
+        expect(PlayableSlot).toHaveBeenCalledTimes(1);
+        expect(Slots).toHaveBeenCalledTimes(1);
+
+    });
+    test('Create a new board with just one slot that is not playable', () => {
+
+        const testBoard = new Board(1,1);
+
+        expect(PlayableSlot).not.toHaveBeenCalledTimes(1);
+        expect(Slots).toHaveBeenCalledTimes(1);
+
+    });
 })

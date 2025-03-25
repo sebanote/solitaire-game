@@ -14,6 +14,7 @@ export class Board {
             for(const slot of this.slots){
                 const index = this.slots.indexOf(slot);
                 if(arrangement[index] != null){
+                    console.log(slot)
                     const newPlayableSlot = new PlayableSlot(slot.getSlotPositionX,slot.getSlotPositionY);
                     newPlayableSlot.setFull = arrangement[index];
                     this.slots[index] = newPlayableSlot
