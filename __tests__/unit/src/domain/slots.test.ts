@@ -1,78 +1,40 @@
 import { describe, expect, test } from '@jest/globals';
-import { PlayableSlot, Slots } from "../../../../src/domain/entities/slots";
+import { GenericSlot } from "../../../../src/domain/entities/slot";
+import { PlayableSlot } from '../../../../src/domain/decorators/playableSlotDecorator';
 
-describe("Class PlayableSlot", () => {
-
-    beforeEach(() => {
-        const testSlot = new PlayableSlot(1,2);
-        return testSlot;
-    })
+describe("GenericSlot class", () => {
 
     test("create new slot instance with position 1, 2", () => {
 
-        const testSlot = new PlayableSlot(1,2);
+        const testSlot = new GenericSlot(1,2);
 
-        expect(testSlot.getSlotPositionX).toEqual(1);
-        expect(testSlot.getSlotPositionY).toEqual(2);
-
-    })
-
-    test("get slot position x", () => {
-
-        const testSlot = new PlayableSlot(1,2);
-        const slotPositionX = testSlot.getSlotPositionX;
-
-        expect(slotPositionX).toEqual(1);
+        expect(testSlot.position_x).toEqual(1);
+        expect(testSlot.position_y).toEqual(2);
 
     })
-
-    test("get slot position y", () => {
-
-        const testSlot = new PlayableSlot(1,2);
-        const slotPositionY = testSlot.getSlotPositionY;
-
-        expect(slotPositionY).toEqual(2);
-
-    })
-
-    test("set slot as full", () => {
-
-        const testSlot = new PlayableSlot(1,2);
-
-        testSlot.setFull = false;
-        
-        expect(testSlot.isEmptyStatus).toBeFalsy();
-
-    })
-
 })
 
-describe("Slots", () => {
+describe("PlayableSlotDecorator", () => {
 
-    test("create new slot instance with position 1, 2", () => {
+    test("create a GenericSlot and make it playable", () => {
+        
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot);
 
-        const testSlot = new Slots(1,2);
-
-        expect(testSlot.getSlotPositionX).toEqual(1);
-        expect(testSlot.getSlotPositionY).toEqual(2);
-
+        expect(playableSlot.isTaken).toEqual(false)
     })
 
-    test("get slot position x", () => {
+    test("make a GenericSlot playable and taken", () => {
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot, true);
 
-        const testSlot = new Slots(1,2);
-        const slotPositionX = testSlot.getSlotPositionX;
-
-        expect(slotPositionX).toEqual(1);
-
+        expect(playableSlot.isTaken).toEqual(true)
     })
 
-    test("get slot position y", () => {
+    test("make a GenericSlot playable and not taken", () => {
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot, false);
 
-        const testSlot = new Slots(1,2);
-        const slotPositionY = testSlot.getSlotPositionY;
-
-        expect(slotPositionY).toEqual(2);
-
+        expect(playableSlot.isTaken).toEqual(false)
     })
 })
