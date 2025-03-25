@@ -14,7 +14,7 @@ describe("GenericSlot class", () => {
     })
 })
 
-describe("PlayableSlotDecorator", () => {
+describe("PlayableSlot", () => {
 
     test("create a GenericSlot and make it playable", () => {
         
@@ -36,5 +36,32 @@ describe("PlayableSlotDecorator", () => {
         const playableSlot = new PlayableSlot(genericSlot, false);
 
         expect(playableSlot.isTaken).toEqual(false)
+    })
+
+    test("get PlayableSlot position_x", () => {
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot);
+
+        const position_x = playableSlot.positionX;
+
+        expect(position_x).toBe(1);
+    })
+
+    test("get PlayableSlot position_y", () => {
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot);
+
+        const position_y = playableSlot.positionY;
+
+        expect(position_y).toBe(2);
+    })
+
+    test("set PlayableSlot as taken", () => {
+        const genericSlot = new GenericSlot(1,2);
+        const playableSlot = new PlayableSlot(genericSlot);
+
+        playableSlot.setTaken(true);
+
+        expect(playableSlot.isTaken).toBe(true);
     })
 })
