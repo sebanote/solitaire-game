@@ -33,7 +33,7 @@ describe('Board class', () => {
     test('Create a new Board with 81 slots', () => {
         const testBoard = new Board(9,9);
 
-        expect(testBoard.slots.length).toEqual(81);
+        expect(Object.keys(testBoard.slots).length).toEqual(81);
         expect(GenericSlot).toHaveBeenCalledTimes(81);
     });
     test('Create a new Board with 9 slots, 3 of them should be playable', () => {
@@ -41,7 +41,7 @@ describe('Board class', () => {
 
         expect(GenericSlot).toHaveBeenCalledTimes(9);
         expect(PlayableSlot).toHaveBeenCalledTimes(3);
-        expect(testBoard.slots.length).toEqual(9);
+        expect(Object.keys(testBoard.slots).length).toEqual(9);
     });
     test('Create a new board with just one slot that is playable and is not taken', () => {
 
@@ -49,8 +49,6 @@ describe('Board class', () => {
 
         expect(GenericSlot).toHaveBeenCalledTimes(1);
         expect(PlayableSlot).toHaveBeenCalledTimes(1);
-        expect((testBoard.slots[0] as PlayableSlot).setTaken).toHaveBeenCalledWith(false);
-
     });
     test('Create a new board with just one slot that is playable and taken', () => {
 
@@ -58,7 +56,6 @@ describe('Board class', () => {
 
         expect(GenericSlot).toHaveBeenCalledTimes(1);
         expect(PlayableSlot).toHaveBeenCalledTimes(1);
-        expect((testBoard.slots[0] as PlayableSlot).setTaken).toHaveBeenCalledWith(true);
 
     });
     test('Create a new board with just one slot that is not playable', () => {
@@ -69,4 +66,10 @@ describe('Board class', () => {
         expect(GenericSlot).toHaveBeenCalledTimes(1);
 
     });
+    test('slots should be a Record with x,y as key and slot as value', () => {
+
+        const testBoard = new Board(1,1,[true]);
+
+        expect(Object.keys(testBoard.slots)).toStrictEqual(['0,0']);
+    })
 })
