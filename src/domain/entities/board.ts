@@ -6,7 +6,7 @@ export class Board {
     constructor(width: number, height: number, arrangement?: Array<null | boolean>){
         for(let y = 0; y < height; y++){
             for(let x = 0; x < width; x++){
-                const key = x + "," + y;
+                const key = y + "," + x;
                 const newSlot = new GenericSlot(x,y);
                 this.slots[key] = newSlot;
             }
@@ -15,11 +15,12 @@ export class Board {
         if(arrangement){
             const keys = Object.keys(this.slots);
 
-            for(const item of arrangement){
-                if(item != null){
-                    const index = arrangement.indexOf(item);
-                    const key = keys[index];
-                    this.slots[key] = new PlayableSlot(this.slots[key], item)
+            
+
+            for(let i = 0; i < arrangement.length; i++){
+                if(arrangement[i] != null){
+                    const key = keys[i];
+                    this.slots[key] = new PlayableSlot(this.slots[key], arrangement[i] as boolean)
                 }
             }
         }
