@@ -20,7 +20,7 @@ export class PlayableSlot extends SlotDecorator {
 
     protected taken: boolean = false;
 
-    get isTaken() {
+    isTaken() {
         return this.taken;
     }
 

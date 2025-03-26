@@ -21,21 +21,21 @@ describe("PlayableSlot", () => {
         const genericSlot = new GenericSlot(1,2);
         const playableSlot = new PlayableSlot(genericSlot);
 
-        expect(playableSlot.isTaken).toEqual(false)
+        expect(playableSlot.isTaken()).toEqual(false)
     })
 
     test("make a GenericSlot playable and taken", () => {
         const genericSlot = new GenericSlot(1,2);
         const playableSlot = new PlayableSlot(genericSlot, true);
 
-        expect(playableSlot.isTaken).toEqual(true)
+        expect(playableSlot.isTaken()).toEqual(true)
     })
 
     test("make a GenericSlot playable and not taken", () => {
         const genericSlot = new GenericSlot(1,2);
         const playableSlot = new PlayableSlot(genericSlot, false);
 
-        expect(playableSlot.isTaken).toEqual(false)
+        expect(playableSlot.isTaken()).toEqual(false)
     })
 
     test("get PlayableSlot position_x", () => {
@@ -62,6 +62,6 @@ describe("PlayableSlot", () => {
 
         playableSlot.setTaken(true);
 
-        expect(playableSlot.isTaken).toBe(true);
+        expect(playableSlot.isTaken()).toBe(true);
     })
 })

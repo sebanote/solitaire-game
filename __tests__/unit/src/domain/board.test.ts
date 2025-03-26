@@ -18,7 +18,8 @@ jest.mock("../../../../src/domain/decorators/playableSlotDecorator", () => {
             return {
                 position_x: slot.position_x,
                 position_y: slot.position_y,
-                setTaken: jest.fn().mockReturnValue(slot),
+                setTaken: jest.fn(),
+                isTaken: jest.fn().mockReturnValue(true),
             }
         })
     }
@@ -71,5 +72,22 @@ describe('Board class', () => {
         const testBoard = new Board(1,1,[true]);
 
         expect(Object.keys(testBoard.slots)).toStrictEqual(['0,0']);
+    })
+    test('set PlayableSlot as taken', () => {
+
+        const testBoard = new Board(1,1,[false]);
+
+        testBoard.setAsTaken(testBoard.slots['0,0'] as PlayableSlot);
+
+        expect((testBoard.slots['0,0'] as PlayableSlot).setTaken).toHaveBeenCalledWith(true);
+    })
+    test('ask slot if taken', () => {
+
+        const testBoard = new Board(1,1,[true]);
+
+        const taken = testBoard.askIfTaken(testBoard.slots['0,0'] as PlayableSlot);
+
+        expect((testBoard.slots['0,0'] as PlayableSlot).isTaken).toHaveBeenCalledTimes(1);
+        expect(taken).toEqual(true);
     })
 })

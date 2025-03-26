@@ -27,4 +27,12 @@ export class Board {
     
     slots: Record<string, PlayableSlot | GenericSlot> = {};
 
+    setAsTaken(slot: PlayableSlot) {
+        slot.setTaken(true);
+    }
+
+    askIfTaken(slot: PlayableSlot): boolean {
+        return slot.isTaken();
+    }
+
 }
