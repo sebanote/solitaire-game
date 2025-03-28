@@ -5,9 +5,7 @@ export interface Slot {
 }
 
 export class GenericSlot implements Slot {
-
     constructor(public readonly position_x: number, public readonly position_y: number){}
-
 }
 
 
