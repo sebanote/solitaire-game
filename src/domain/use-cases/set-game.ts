@@ -1,20 +1,22 @@
 import { Board } from '../entities/board';
 import { PlayableSlot } from '../entities/decorators/playableSlotDecorator';
-import { Move } from '../entities/move'
 import { GenericSlot } from '../entities/slot';
+import { Game } from '../entities/game';
 
 export class SetGame {
 
-    constructor(private width: number, private height: number, private arrangement: Array<Array<null | boolean>>){}
+    constructor(private width: number, private height: number, private arrangement: Array<Array<null | boolean>>){
+        this.board = new Board(this.width, this.height);
+        this.game = new Game(this.board as Board);
+    }
 
-    private moves: Move[] = [];
+    private game: Game;
     private possibleMoves: number = 100;
     private board: object | Board = {};
     private pins: number = 0
 
     setBoard(): boolean {
         try{
-            this.board = new Board(this.width, this.height);
 
             for(let y = 0; y < this.height; y++){
                 for(let x = 0; x < this.width; x++){

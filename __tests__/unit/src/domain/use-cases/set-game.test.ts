@@ -5,15 +5,17 @@ import { PlayableSlot } from '../../../../../src/domain/entities/decorators/play
 
 
 
-jest.mock("../../../../../src/domain/entities/board", () => {
+jest.mock('../../../../../src/domain/entities/board', () => {
     return {
-        Board: jest.fn().mockImplementation(function (this: { width: number; height: number; slots: Record<string, unknown> }, width: number, height: number) {
-            this.width = width;
-            this.height = height;
-            this.slots = {};
+        Board: jest.fn().mockImplementation((x,y) => {
+            return {
+                getHeight: x,
+                getWidth: y,
+                slots: {}
+            }
         })
-    };
-});
+    }
+})
 jest.mock("../../../../../src/domain/entities/slot", () => {
     return {
         GenericSlot: jest.fn().mockImplementation()
