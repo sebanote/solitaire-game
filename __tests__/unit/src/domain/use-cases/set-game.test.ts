@@ -52,8 +52,6 @@ describe("SetGame class", () => {
 
         testGame.setBoard()
 
-        console.log(testGame)
-
         expect(testGame).toBeInstanceOf(SetGame);
     })
     test("Set a new board for a game", () => {
