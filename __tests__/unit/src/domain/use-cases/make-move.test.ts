@@ -3,7 +3,7 @@ import { PlayableSlot } from '../../../../../src/domain/entities/decorators/play
 import { Move } from '../../../../../src/domain/entities/move';
 import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { MakeMove } from '../../../../../src/domain/use-cases/make-move';
-import { SetGame } from '../../../../../src/domain/use-cases/set-game'
+import { InitGame } from '../../../../../src/domain/use-cases/init-game'
 
 
 

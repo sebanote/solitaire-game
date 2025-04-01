@@ -6,9 +6,10 @@ export class Game {
     private possibleMoves: number = 100;
     private pins: number = 0;
 
-    constructor(private board: Board){}
+    constructor(private board: Board){console.log('you are instanciating the real Game class')}
 
     get getBoard(): Board {
+        console.log('you are calling get board from the real Game class')
         return this.board as Board;
     }
 
@@ -29,8 +30,8 @@ export class Game {
     }   
 
     rollBackMove() {
-        if(this.moves.length > 0) {
-            this.moves.pop();
+        if (this.moves.length > 0) {
+            return this.moves.pop();
         }
     }
 }

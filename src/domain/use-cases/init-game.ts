@@ -3,7 +3,7 @@ import { PlayableSlot } from '../entities/decorators/playableSlotDecorator';
 import { GenericSlot } from '../entities/slot';
 import { Game } from '../entities/game';
 
-export class SetGame {
+export class InitGame {
 
     constructor(private width: number, private height: number, private arrangement: Array<Array<null | boolean>>){
         this.board = new Board(this.width, this.height);

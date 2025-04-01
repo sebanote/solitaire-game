@@ -1,4 +1,4 @@
-import { SetGame } from '../../../../../src/domain/use-cases/set-game'
+import { InitGame } from '../../../../../src/domain/use-cases/init-game'
 import { Board } from '../../../../../src/domain/entities/board';
 import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { PlayableSlot } from '../../../../../src/domain/entities/decorators/playableSlotDecorator';
@@ -31,7 +31,7 @@ beforeEach(() => {
     jest.clearAllMocks();
 });
 
-describe("SetGame class", () => {
+describe("InitGame class", () => {
     test("create new game", () => {
 
         const testArrangement = [
@@ -40,19 +40,19 @@ describe("SetGame class", () => {
             [null,true,false],
         ]
 
-        const testGame = new SetGame(3,3,testArrangement);
+        const testGame = new InitGame(3,3,testArrangement);
 
-        expect(testGame).toBeInstanceOf(SetGame);
+        expect(testGame).toBeInstanceOf(InitGame);
     })
     test("create new game with 0 slots", () => {
 
         const testArrangement: boolean[][] = [[]]
 
-        const testGame = new SetGame(0,0,testArrangement);
+        const testGame = new InitGame(0,0,testArrangement);
 
         testGame.setBoard()
 
-        expect(testGame).toBeInstanceOf(SetGame);
+        expect(testGame).toBeInstanceOf(InitGame);
     })
     test("Set a new board for a game", () => {
 
@@ -62,7 +62,7 @@ describe("SetGame class", () => {
             [null,true,false],
         ]
 
-        const testGame = new SetGame(3,3,testArrangement);
+        const testGame = new InitGame(3,3,testArrangement);
 
         testGame.setBoard();
 
@@ -80,7 +80,7 @@ describe("SetGame class", () => {
             [null,true,false],
         ]
 
-        const testGame = new SetGame(3,3, testArrangement)
+        const testGame = new InitGame(3,3, testArrangement)
         testGame.setBoard();
         const pins = testGame.getPins();
 
@@ -95,7 +95,7 @@ describe("SetGame class", () => {
             [null,false,false],
         ]
 
-        const testGame = new SetGame(3,3, testArrangement)
+        const testGame = new InitGame(3,3, testArrangement)
         
         const pins = testGame.getPins();
 
@@ -110,7 +110,7 @@ describe("SetGame class", () => {
             [null,true,false],
         ]
 
-        const testGame = new SetGame(3,3, testArrangement)
+        const testGame = new InitGame(3,3, testArrangement)
         testGame.setPins(10);
 
         expect(testGame.getPins()).toEqual(10);
@@ -124,7 +124,7 @@ describe("SetGame class", () => {
             [null,true,false],
         ]
 
-        const testGame = new SetGame(3,3, testArrangement)
+        const testGame = new InitGame(3,3, testArrangement)
         testGame.setPins(0);
 
         expect(testGame.getPins()).toEqual(0);
