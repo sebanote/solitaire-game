@@ -129,6 +129,29 @@ describe("InitGame class", () => {
 
         expect(testGame.getPins()).toEqual(0);
     })
+
+    test("setBoard returns false and logs error on exception", () => {
+        const testArrangement = [
+            [null, true, false],
+            [null, true, false],
+            [null, true, false],
+        ];
+
+        const testGame = new InitGame(3, 3, testArrangement);
+
+        jest.spyOn(console, "error").mockImplementation(() => {});
+
+        // Simulate an error by mocking the board to throw an exception
+        (testGame as any).board = null;
+
+        const result = testGame.setBoard();
+
+        expect(result).toBe(false);
+        expect(console.error).toHaveBeenCalledTimes(1);
+
+        (console.error as jest.Mock).mockRestore();
+    });
+
     // test("Remove a pin", () => {
 
     //     const testGame = new Game(3,3,[

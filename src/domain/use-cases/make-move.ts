@@ -1,15 +1,15 @@
 import { Board } from '../entities/board';
 import { PlayableSlot } from '../entities/decorators/playableSlotDecorator';
 import { Move } from '../entities/move'
-import { GenericSlot } from '../entities/slot';
+import { Slot  } from '../entities/slot';
 
 export class MakeMove {
 
     constructor(private move: Move, private board: Board){
-        this.midSlot = this.findMidSlot() 
+        this.midSlot = this.board.slots[this.findMidSlot(this.move.movingFrom, this.move.movingTo)];
     }
 
-    private midSlot: PlayableSlot;
+    private midSlot: Slot;
 
     get getMove() {
         return this.move;
@@ -26,18 +26,27 @@ export class MakeMove {
         return false;
     }
 
-    findMidSlot(): PlayableSlot{
-        const x_diff = this.board.slots[this.move.movingTo].position_x - this.board.slots[this.move.movingFrom].position_x
-        const midSlot_x = x_diff > 0 ? this.board.slots[this.move.movingFrom].position_x + 1 : this.board.slots[this.move.movingFrom].position_x - 1;
+    findMidSlot(orig:string, dest:string): string {
+         const from = orig.split(',');
+         const to = dest.split(',')
 
-        const y_diff = this.board.slots[this.move.movingTo].position_y - this.board.slots[this.move.movingFrom].position_y
-        const midSlot_y = y_diff > 0 ? this.board.slots[this.move.movingFrom].position_y + 1 : this.board.slots[this.move.movingFrom].position_y - 1;
+         const from_x = +from[0]
+         const from_y = +from[1]
+         const to_x = +to[0]
+         const to_y = +to[1]
 
-        return new PlayableSlot(new GenericSlot(midSlot_x, midSlot_y), false)
+         const midSlot_x = from_x + (to_x - from_x)/2
+         const midSlot_y = from_y + (to_y - from_y)/2
+         return midSlot_x + ',' + midSlot_y;
     }
 
-    performMove() {
-        (this.board.slots[this.move.movingFrom] as PlayableSlot).setTaken(false);
-        (this.board.slots[this.move.movingTo] as PlayableSlot).setTaken(true);
+    performMove(): boolean {
+        if(this.isMoveAllowed()){
+            (this.board.slots[this.move.movingFrom] as PlayableSlot).setTaken(false);
+            (this.board.slots[this.move.movingTo] as PlayableSlot).setTaken(true);
+            (this.board.slots[this.midSlot.position_x + ',' + this.midSlot.position_y] as PlayableSlot).setTaken(false);
+            return true;
+        }
+        return false;
     }
 }

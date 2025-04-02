@@ -10,22 +10,18 @@ import { Move } from '../../../../../src/domain/entities/move'
 jest.mock('../../../../../src/domain/entities/game', () => {
     return {
         Game: jest.fn().mockImplementation((board) => {
-            console.log('Mocked Gameee')
             return {
                 moves: [new Move('0,0','1,0')],
                 possibleMoves: 100,
                 pins: 100,
                 board: board,
                 addMove: jest.fn().mockImplementation(() => {
-                    //console.log(move.movingFrom)
                 }),
                 rollBackMove: jest.fn(),
                 get getPins () {
-                    console.log('get pins')
                     return this.pins;
                 },
                 set setPins(pin: number) {
-                    console.log('set pins')
                     this.pins = pin
                 },
                 performMove: jest.fn()
@@ -36,7 +32,6 @@ jest.mock('../../../../../src/domain/entities/game', () => {
 jest.mock('../../../../../src/domain/entities/decorators/playableSlotDecorator', () => {
     return {
         PlayableSlot: jest.fn().mockImplementation(() => {
-            console.log('mocked PlayableSlot')
             return {
                 getAvailableMoves: jest.fn().mockReturnValue(['0,0','0,1','2,1'])
             }
@@ -46,7 +41,6 @@ jest.mock('../../../../../src/domain/entities/decorators/playableSlotDecorator',
 jest.mock('../../../../../src/domain/entities/slot', () => {
     return {
         GenericSlot: jest.fn().mockImplementation(() => {
-            console.log('mocked GenericSlot')
             return {}
         })
     }
@@ -54,7 +48,6 @@ jest.mock('../../../../../src/domain/entities/slot', () => {
 jest.mock('../../../../../src/domain/entities/move', () => {
     return {
         Move: jest.fn().mockImplementation((from,to) => {
-            console.log("Mocked Move")
             return {
                 movingFrom: from,
                 movingTo: to
@@ -65,7 +58,6 @@ jest.mock('../../../../../src/domain/entities/move', () => {
 jest.mock('../../../../../src/domain/entities/board', () => {
     return {
         Board: jest.fn().mockImplementation((x,y) => {
-            console.log("Mocked Boardee")
             return {
                 getHeight: x,
                 getWidth: y,
@@ -87,10 +79,8 @@ jest.mock('../../../../../src/domain/entities/board', () => {
 jest.mock('../../../../../src/domain/use-cases/make-move', () => {
     return {
         MakeMove: jest.fn().mockImplementation(() => {
-            console.log("Mocked MakeMove")
             return {
                 getMove: jest.fn().mockImplementation(() => {
-                    console.log("mocked getMove function")
                     return {
                         move: new Move('8,8','8,9')
                     }
