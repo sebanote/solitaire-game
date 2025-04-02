@@ -6,10 +6,9 @@ export class Game {
     private possibleMoves: number = 100;
     private pins: number = 0;
 
-    constructor(private board: Board){console.log('you are instanciating the real Game class')}
+    constructor(private board: Board){}
 
     get getBoard(): Board {
-        console.log('you are calling get board from the real Game class')
         return this.board as Board;
     }
 
