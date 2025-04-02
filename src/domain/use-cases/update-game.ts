@@ -40,12 +40,13 @@ export class UpdateGame {
 
     rollBackBoard() {
         const removed = this.removeOneMove();
-        
-        const backMove = new Move(removed?.movingTo, removed?.movingFrom)
-        const rollBackMove = new MakeMove(backMove, this.game.getBoard)
-        
-        rollBackMove.performMove()
 
-        this.restoreOnePin();
+        if(removed){
+            const backMove = new Move(removed.movingTo, removed.movingFrom)
+            const rollBackMove = new MakeMove(backMove, this.game.getBoard)
+
+            rollBackMove.performMove()
+            this.restoreOnePin();
+        }
     }
 }
