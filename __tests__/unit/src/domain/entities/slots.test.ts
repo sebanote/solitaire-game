@@ -91,4 +91,14 @@ describe("PlayableSlot class", () => {
         expect(playableSlot.getAvailableMoves()).toEqual([]);
 
     })
+    test('get influenced slots', () => {
+
+        const playableSlot = new PlayableSlot(new GenericSlot(1,2),true);
+
+        const influencedSlots = playableSlot.getInfluencedSlots;
+
+        expect(influencedSlots).toEqual([])
+
+    })
+
 })

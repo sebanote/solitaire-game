@@ -10,6 +10,7 @@ export class PlayableSlot extends SlotDecorator {
     }
     
     protected availableMoves: string[] = []
+    protected influencedSlots: string[] = []
 
     get positionX(): number {
         return super.position_x;
@@ -33,5 +34,9 @@ export class PlayableSlot extends SlotDecorator {
 
     setAvailableMoves(moves: string[]) {
         this.availableMoves = moves;
+    }
+
+    get getInfluencedSlots() {
+        return this.influencedSlots;
     }
 }
