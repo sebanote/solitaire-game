@@ -39,4 +39,8 @@ export class PlayableSlot extends SlotDecorator {
     get getInfluencedSlots() {
         return this.influencedSlots;
     }
+
+    set setInfluencedSlots(slots: string[]){
+        this.influencedSlots = slots;
+    }
 }

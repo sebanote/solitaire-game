@@ -98,7 +98,13 @@ describe("PlayableSlot class", () => {
         const influencedSlots = playableSlot.getInfluencedSlots;
 
         expect(influencedSlots).toEqual([])
+    })
+    test('set influenced slots', () => {
+        const playableSlot = new PlayableSlot(new GenericSlot(1,2),true);
 
+        playableSlot.setInfluencedSlots = ['1,0','1,1','0,2','2,2'];
+
+        expect(playableSlot.getInfluencedSlots).toEqual(['1,0','1,1','0,2','2,2'])
     })
 
 })
