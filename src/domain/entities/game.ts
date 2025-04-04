@@ -6,7 +6,7 @@ export class Game {
     private possibleMoves: number = 100;
     private pins: number = 0;
 
-    constructor(private board: Board){}
+    constructor(private board: Board){console.log('real game instance')}
 
     get getBoard(): Board {
         return this.board as Board;

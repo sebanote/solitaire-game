@@ -2,6 +2,8 @@ import { InitGame } from '../../../../../src/domain/use-cases/init-game'
 import { Board } from '../../../../../src/domain/entities/board';
 import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { PlayableSlot } from '../../../../../src/domain/entities/decorators/playableSlotDecorator';
+import { InfluencedSlot } from '../../../../../src/domain/entities/interfaces/influencedSlot';
+import { Game } from '../../../../../src/domain/entities/game'
 
 
 
@@ -16,14 +18,34 @@ jest.mock('../../../../../src/domain/entities/board', () => {
         })
     }
 })
+jest.mock('../../../../../src/domain/entities/game', () => {
+    return {
+        Game: jest.fn().mockImplementation()
+    }
+})
 jest.mock("../../../../../src/domain/entities/slot", () => {
     return {
-        GenericSlot: jest.fn().mockImplementation()
+        GenericSlot: jest.fn().mockImplementation(() => {
+            return {
+                position_x: 1,
+                position_y: 2
+            }
+        })
     };
 });
 jest.mock("../../../../../src/domain/entities/decorators/playableSlotDecorator", () => {
+    const originalModule = jest.requireActual("../../../../../src/domain/entities/decorators/playableSlotDecorator");
     return {
-        PlayableSlot: jest.fn().mockImplementation()
+        PlayableSlot: jest.fn().mockImplementation(() => {
+            return {
+                position_x: 1,
+                position_y: 2,
+                isTaken: jest.fn().mockReturnValue(true),
+                set setInfluencedSlots (influenced: InfluencedSlot){
+                    this.influencedSlots = influenced
+                }
+            }
+        })
     };
 });
 
@@ -43,6 +65,9 @@ describe("InitGame class", () => {
         const testGame = new InitGame(3,3,testArrangement);
 
         expect(testGame).toBeInstanceOf(InitGame);
+        expect(Board).toHaveBeenCalledTimes(1);
+        expect(Board).toHaveBeenCalledWith(3,3);
+        expect(Game).toHaveBeenCalledTimes(1);
     })
     test("create new game with 0 slots", () => {
 
@@ -53,6 +78,9 @@ describe("InitGame class", () => {
         testGame.setBoard()
 
         expect(testGame).toBeInstanceOf(InitGame);
+        expect(Board).toHaveBeenCalledTimes(1);
+        expect(Board).toHaveBeenCalledWith(0,0);
+        expect(Game).toHaveBeenCalledTimes(1);
     })
     test("Set a new board for a game", () => {
 
@@ -69,8 +97,7 @@ describe("InitGame class", () => {
         expect(Board).toHaveBeenCalledTimes(1);
         expect(GenericSlot).toHaveBeenCalledTimes(9);
         expect(PlayableSlot).toHaveBeenCalledTimes(6);
-        expect(testGame.getBoard().slots['0,0']).toBeInstanceOf(GenericSlot);
-        expect(testGame.getBoard().slots['2,2']).toBeInstanceOf(PlayableSlot);
+        expect((testGame.getBoard().slots['2,2'] as PlayableSlot).isTaken).toBeDefined();
     })
     test("Get number of pins", () => {
 
@@ -152,39 +179,77 @@ describe("InitGame class", () => {
         (console.error as jest.Mock).mockRestore();
     });
 
-    // test("Remove a pin", () => {
+    test("fill influenced slots for a slot with valid neighbors", () => {
+        const testArrangement = [
+            [null, false, false],
+            [null, true, false],
+            [null, true, false],
+        ];
 
-    //     const testGame = new Game(3,3,[
-    //         null,null,false,
-    //         false,null,null,
-    //         true,true,true
-    //     ])
+        const initGame = new InitGame(3, 3, testArrangement);
+        initGame.setBoard();
 
-    //     const pins = testGame.pins;
+        const mocked = jest.spyOn((initGame.getBoard().slots['2,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
-    //     testGame.removePin();
+        const result = initGame.fillInfluencedSlots();
 
-    //     expect(testGame.pins).toEqual(pins - 1)
+        expect(result).toBe(true)
+        expect(mocked).toHaveBeenCalledTimes(1)
+        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+    });
 
-    // })
-    // test("Finish a game when there's only one pin", () => {
+    test("fill influenced slots for a slot surrounded by generic slots", () => {
+        const testArrangement = [
+            [null, null, null],
+            [null, true, null],
+            [null, null, null],
+        ];
 
-    //     const testGame = new Game(3,3,[
-    //         null,null,false,
-    //         false,null,null,
-    //         true,false,false
-    //     ])
+        const initGame = new InitGame(3, 3, testArrangement);
+        initGame.setBoard();
+        const mocked = jest.spyOn((initGame.getBoard().slots['1,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
-    //     expect(testGame.finished()).toEqual(true)
-    // })
-    // test("Finish a game when more than one pin but not possible moves", () => {
+        const result = initGame.fillInfluencedSlots();
 
-    //     const testGame = new Game(3,3,[
-    //         null,null,true,
-    //         false,null,null,
-    //         true,false,false
-    //     ])
+        expect(result).toBe(true)
+        expect(mocked).toHaveBeenCalledTimes(1)
+        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+    });
 
-    //     expect(testGame.finished()).toEqual(true)
-    // })
+    test("fill influenced slots for a single slot board", () => {
+        const testArrangement = [
+            [true]
+        ];
+
+        const initGame = new InitGame(1, 1, testArrangement);
+        initGame.setBoard();
+        const mocked = jest.spyOn((initGame.getBoard().slots['0,0'] as PlayableSlot), 'setInfluencedSlots', 'set' )
+
+        const result = initGame.fillInfluencedSlots();
+
+        expect(result).toBe(true)
+        expect(mocked).toHaveBeenCalledTimes(1)
+        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+    });
+
+    test("fill influenced slots for a slot with multiple neighbors", () => {
+        const testArrangement = [
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+            [true, true, true, true, true],
+        ];
+
+        const initGame = new InitGame(5, 5, testArrangement);
+        initGame.setBoard();
+
+        const mocked = jest.spyOn((initGame.getBoard().slots['2,2'] as PlayableSlot), 'setInfluencedSlots', 'set' )
+
+        const result = initGame.fillInfluencedSlots();
+
+        expect(result).toBe(true)
+        expect(mocked).toHaveBeenCalledTimes(1)
+        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+    });
 })

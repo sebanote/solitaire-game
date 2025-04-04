@@ -2,6 +2,7 @@ import { Board } from '../entities/board';
 import { PlayableSlot } from '../entities/decorators/playableSlotDecorator';
 import { GenericSlot } from '../entities/slot';
 import { Game } from '../entities/game';
+import { InfluencedSlot } from '../entities/interfaces/influencedSlot';
 
 export class InitGame {
 
@@ -50,4 +51,63 @@ export class InitGame {
         this.pins = pins;
     }
 
+    fillInfluencedSlots(): boolean {
+
+        const slots = Object.keys((this.board as Board).slots)
+
+        const max_x = (this.board as Board).getWidth - 1;
+        const max_y = (this.board as Board).getHeight - 1;
+
+        for(let slot of slots){
+
+            const board = (this.board as Board);
+
+            const next: string[] = [];
+            const aim: string[] = [];
+
+            let slotPosition = slot.split(',')
+
+            let slot_x = +slotPosition[1]
+            let slot_y = +slotPosition[0]
+
+            let next_left_x = slot_x - 1 >= 0 ? slot_x - 1 : -1;
+            let next_right_x = slot_x + 1 <= max_x ? slot_x + 1 : -1;
+            let next_up_y = slot_y - 1 >= 0 ? slot_y - 1 : -1;
+            let next_down_y = slot_y + 1 <= max_y ? slot_y + 1 : -1;
+
+            let aim_left_x = slot_x - 2 >= 0 ? slot_x - 2 : -1;
+            let aim_right_x = slot_x + 2 <= max_x ? slot_x + 2 : -1;
+            let aim_up_y = slot_y - 2 >= 0 ? slot_y - 2 : -1;
+            let aim_down_y = slot_y + 2 <= max_y ? slot_y + 2 : -1;
+
+            if(next_left_x > -1 && board.slots[slot_y + ',' + next_left_x] instanceof PlayableSlot){
+                next.push(slot_y + ',' + next_left_x);
+            }
+            if(next_right_x > -1 && board.slots[slot_y + ',' + next_right_x] instanceof PlayableSlot){
+                next.push(slot_y + ',' + next_right_x );
+            }
+            if(next_up_y > -1 && board.slots[next_up_y + ',' + slot_x] instanceof PlayableSlot){
+                next.push(next_up_y + ',' + slot_x);
+            }
+            if(next_down_y > -1 && board.slots[next_down_y + ',' + slot_x] instanceof PlayableSlot){
+                next.push(next_down_y + ',' + slot_x); 
+            }
+
+            if(aim_left_x > -1 && board.slots[slot_y + ',' + aim_left_x] instanceof PlayableSlot){
+                aim.push(slot_y + ',' + aim_left_x);
+            }
+            if(aim_right_x > -1 && board.slots[slot_y + ',' + aim_right_x] instanceof PlayableSlot){
+                aim.push(slot_y + ',' + aim_right_x);
+            }
+            if(aim_up_y > -1 && board.slots[aim_up_y + ',' + slot_x] instanceof PlayableSlot){
+                aim.push(aim_up_y + ',' + slot_x); 
+            }
+            if(aim_down_y > -1 && board.slots[aim_down_y + ',' + slot_x] instanceof PlayableSlot){
+                aim.push(aim_down_y + ',' + slot_x); 
+            }
+
+            (board.slots[slot] as PlayableSlot).setInfluencedSlots = {next:next, aim:aim}
+        }
+        return true;
+    }
 }
