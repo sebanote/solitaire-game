@@ -40,13 +40,22 @@ export class MakeMove {
          return midSlot_x + ',' + midSlot_y;
     }
 
-    performMove(): boolean {
-        if(this.isMoveAllowed()){
+    performMove(back: boolean): boolean {
+        if(!back){
+            if(this.isMoveAllowed()){
+                (this.board.slots[this.move.movingFrom] as PlayableSlot).setTaken(false);
+                (this.board.slots[this.move.movingTo] as PlayableSlot).setTaken(true);
+                (this.board.slots[this.midSlot.position_x + ',' + this.midSlot.position_y] as PlayableSlot).setTaken(false);
+                return true;
+            }
+        }
+        else {
             (this.board.slots[this.move.movingFrom] as PlayableSlot).setTaken(false);
             (this.board.slots[this.move.movingTo] as PlayableSlot).setTaken(true);
-            (this.board.slots[this.midSlot.position_x + ',' + this.midSlot.position_y] as PlayableSlot).setTaken(false);
+            (this.board.slots[this.midSlot.position_x + ',' + this.midSlot.position_y] as PlayableSlot).setTaken(true);
             return true;
         }
+        
         return false;
     }
 }

@@ -18,6 +18,7 @@ export class UpdateGame {
     addNewMove() {
         if(this.makeMove.isMoveAllowed()){
             this.game.addMove(this.makeMove.getMove);
+            this.removeOnePin()
             return true;
         }
         return false;
@@ -36,7 +37,7 @@ export class UpdateGame {
     }
 
     updateBoard() {
-        this.makeMove.performMove()
+        this.makeMove.performMove(false)
     }
 
     rollBackBoard() {
@@ -46,7 +47,7 @@ export class UpdateGame {
             const backMove = new Move(removed.movingTo, removed.movingFrom)
             const rollBackMove = new MakeMove(backMove, this.game.getBoard)
 
-            rollBackMove.performMove()
+            rollBackMove.performMove(true)
             this.restoreOnePin();
         }
     }
@@ -61,7 +62,7 @@ export class UpdateGame {
 
             for(const influencedSlot of influencedSlots){
                 if(influencedSlot[1]){
-                    if((this.game.getBoard.slots[influencedSlot[0]] as PlayableSlot).isTaken && !(this.game.getBoard.slots[influencedSlot[1]] as PlayableSlot).isTaken){
+                    if((this.game.getBoard.slots[influencedSlot[0]] as PlayableSlot).isTaken() && !(this.game.getBoard.slots[influencedSlot[1]] as PlayableSlot).isTaken()){
                         availableMoves.push(influencedSlot[1])
                     }
                 }

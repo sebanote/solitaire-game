@@ -13,7 +13,7 @@ describe("InitGame class", () => {
         const testGame = new InitGame(3,3,testArrangement);
 
         expect(testGame).toBeInstanceOf(InitGame);
-        expect(testGame.getBoard().getHeight).toBe(3)
+        expect(testGame.game.getBoard.getHeight).toBe(3)
     })
     test("create new game with 0 slots", () => {
 
@@ -35,89 +35,9 @@ describe("InitGame class", () => {
 
         testGame.setBoard();
 
-        expect((testGame.getBoard().slots['2,2'] as PlayableSlot).isTaken()).toBe(false);
-        expect((testGame.getBoard().slots['2,1'] as PlayableSlot).isTaken()).toBe(true);
+        expect((testGame.game.getBoard.slots['2,2'] as PlayableSlot).isTaken()).toBe(false);
+        expect((testGame.game.getBoard.slots['2,1'] as PlayableSlot).isTaken()).toBe(true);
     })
-    test("Get number of pins", () => {
-
-        const testArrangement = [
-            [null,true,false],
-            [null,true,false],
-            [null,true,false],
-        ]
-
-        const testGame = new InitGame(3,3, testArrangement)
-        testGame.setBoard();
-        const pins = testGame.getPins();
-
-        expect(pins).toEqual(3);
-
-    })
-    test("Get number of pins if 0 pins", () => {
-
-        const testArrangement = [
-            [null,null,false],
-            [null,false,false],
-            [null,false,false],
-        ]
-
-        const testGame = new InitGame(3,3, testArrangement)
-        
-        const pins = testGame.getPins();
-
-        expect(pins).toEqual(0);
-    })
-    
-    test("set pins to 10", () => {
-
-        const testArrangement = [
-            [null,true,false],
-            [null,true,false],
-            [null,true,false],
-        ]
-
-        const testGame = new InitGame(3,3, testArrangement)
-        testGame.setPins(10);
-
-        expect(testGame.getPins()).toEqual(10);
-    })
-
-    test("set pins to 0", () => {
-
-        const testArrangement = [
-            [null,true,false],
-            [null,true,false],
-            [null,true,false],
-        ]
-
-        const testGame = new InitGame(3,3, testArrangement)
-        testGame.setPins(0);
-
-        expect(testGame.getPins()).toEqual(0);
-    })
-
-    test("setBoard returns false and logs error on exception", () => {
-        const testArrangement = [
-            [null, true, false],
-            [null, true, false],
-            [null, true, false],
-        ];
-
-        const testGame = new InitGame(3, 3, testArrangement);
-
-        jest.spyOn(console, "error").mockImplementation(() => {});
-
-        // Simulate an error by mocking the board to throw an exception
-        (testGame as any).board = null;
-
-        const result = testGame.setBoard();
-
-        expect(result).toBe(false);
-        expect(console.error).toHaveBeenCalledTimes(1);
-
-        (console.error as jest.Mock).mockRestore();
-    });
-
     test("fill influenced slots for a slot with valid neighbors", () => {
         const testArrangement = [
             [null, false, false],
@@ -128,14 +48,14 @@ describe("InitGame class", () => {
         const initGame = new InitGame(3, 3, testArrangement);
         initGame.setBoard();
 
-        const mocked = jest.spyOn((initGame.getBoard().slots['2,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
+        const mocked = jest.spyOn((initGame.game.getBoard.slots['2,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
         expect(mocked).toHaveBeenCalledWith([[], ["2,2"], ["1,1", "0,1"], []])
-        expect((initGame.getBoard().slots["2,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], ["2,2"], ["1,1", "0,1"], []])
+        expect((initGame.game.getBoard.slots["2,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], ["2,2"], ["1,1", "0,1"], []])
     });
 
     test("fill influenced slots for a slot surrounded by generic slots", () => {
@@ -147,14 +67,14 @@ describe("InitGame class", () => {
 
         const initGame = new InitGame(3, 3, testArrangement);
         initGame.setBoard();
-        const mocked = jest.spyOn((initGame.getBoard().slots['1,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
+        const mocked = jest.spyOn((initGame.game.getBoard.slots['1,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
         expect(mocked).toHaveBeenCalledWith([[], [], [], []])
-        expect((initGame.getBoard().slots["1,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], [], [], []])
+        expect((initGame.game.getBoard.slots["1,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], [], [], []])
     });
 
     test("fill influenced slots for a slot with multiple neighbors", () => {
@@ -169,13 +89,13 @@ describe("InitGame class", () => {
         const initGame = new InitGame(5, 5, testArrangement);
         initGame.setBoard();
 
-        const mocked = jest.spyOn((initGame.getBoard().slots['2,2'] as PlayableSlot), 'setInfluencedSlots', 'set' )
+        const mocked = jest.spyOn((initGame.game.getBoard.slots['2,2'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
         expect(mocked).toHaveBeenCalledWith([["2,1", "2,0"], ["2,3", "2,4"], ["1,2", "0,2"], ["3,2"]])
-        expect((initGame.getBoard().slots["2,2"] as PlayableSlot).getInfluencedSlots).toStrictEqual([["2,1", "2,0"], ["2,3", "2,4"], ["1,2", "0,2"], ["3,2"]])
+        expect((initGame.game.getBoard.slots["2,2"] as PlayableSlot).getInfluencedSlots).toStrictEqual([["2,1", "2,0"], ["2,3", "2,4"], ["1,2", "0,2"], ["3,2"]])
     });
 })

@@ -144,7 +144,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('2,1','0,1'), new Board(3,3))
 
-        const moved = testMove.performMove()
+        const moved = testMove.performMove(false)
 
         expect(moved).toBe(true)
         expect((testMove.getBoard.slots['2,1'] as PlayableSlot).setTaken).toHaveBeenCalledWith(false)
@@ -155,7 +155,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('2,2','2,0'), new Board(3,3))
 
-        const moved = testMove.performMove()
+        const moved = testMove.performMove(false)
 
         expect(moved).toBe(false)
         expect((testMove.getBoard.slots['2,1'] as PlayableSlot).setTaken).toHaveBeenCalledTimes(0)

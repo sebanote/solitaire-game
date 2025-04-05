@@ -6,14 +6,10 @@ import { Game } from '../entities/game';
 export class InitGame {
 
     constructor(private width: number, private height: number, private arrangement: Array<Array<null | boolean>>){
-        this.board = new Board(this.width, this.height);
-        this.game = new Game(this.board as Board);
+        this._game = new Game(new Board(this.width, this.height));
     }
 
-    private game: Game;
-    private possibleMoves: number = 100;
-    private board: object | Board = {};
-    private pins: number = 0
+    private _game: Game;
 
     setBoard(): boolean {
         try{
@@ -22,12 +18,12 @@ export class InitGame {
                 for(let x = 0; x < this.width; x++){
                     const index = y + "," + x;
                     if(this.arrangement[y][x] != null){
-                        (this.board as Board).slots[index] = new PlayableSlot(new GenericSlot(x,y), this.arrangement[y][x] as boolean);
+                        (this._game.getBoard).slots[index] = new PlayableSlot(new GenericSlot(x,y), this.arrangement[y][x] as boolean);
                         if(this.arrangement[y][x])
-                            this.pins += 1;
+                            this._game.setPins = this._game.getPins + 1;
                     }
                     else
-                        (this.board as Board).slots[index] = new GenericSlot(x,y);
+                        this._game.getBoard.slots[index] = new GenericSlot(x,y);
                 }
             }
             return true;
@@ -38,28 +34,20 @@ export class InitGame {
         }
     }
 
-    getBoard(): Board {
-        return this.board as Board;
-    }
-
-    getPins() {
-        return this.pins;
-    }
-
-    setPins(pins: number) {
-        this.pins = pins;
+    get game() {
+        return this._game;
     }
 
     fillInfluencedSlots(): boolean {
 
-        const slots = Object.keys((this.board as Board).slots)
+        const slots = Object.keys(this._game.getBoard.slots)
 
-        const max_x = (this.board as Board).getWidth - 1;
-        const max_y = (this.board as Board).getHeight - 1;
+        const max_x = this._game.getBoard.getWidth - 1;
+        const max_y = this._game.getBoard.getHeight - 1;
 
         for(const slot of slots){
 
-            const board = (this.board as Board);
+            const board = this._game.getBoard;
 
             const influenced: Array<string[]> = [[],[],[],[]]
 

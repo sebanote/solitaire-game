@@ -254,7 +254,7 @@ describe('UpdateGame class', () => {
         expect((game.getBoard.slots['0,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
         expect((game.getBoard.slots['0,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
         expect((game.getBoard.slots['0,2'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
-        expect((game.getBoard.slots['0,2'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+        expect((game.getBoard.slots['0,2'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith(['0,1']);
     })
 
     test('update available moves for specific slots with valid influenced slots', () => {
