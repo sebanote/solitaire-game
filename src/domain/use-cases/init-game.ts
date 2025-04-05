@@ -12,26 +12,19 @@ export class InitGame {
     private _game: Game;
 
     setBoard(): boolean {
-        try{
-
-            for(let y = 0; y < this.height; y++){
-                for(let x = 0; x < this.width; x++){
-                    const index = y + "," + x;
-                    if(this.arrangement[y][x] != null){
-                        (this._game.getBoard).slots[index] = new PlayableSlot(new GenericSlot(x,y), this.arrangement[y][x] as boolean);
-                        if(this.arrangement[y][x])
-                            this._game.setPins = this._game.getPins + 1;
-                    }
-                    else
-                        this._game.getBoard.slots[index] = new GenericSlot(x,y);
+        for(let y = 0; y < this.height; y++){
+            for(let x = 0; x < this.width; x++){
+                const index = y + "," + x;
+                if(this.arrangement[y][x] != null){
+                    (this._game.getBoard).slots[index] = new PlayableSlot(new GenericSlot(x,y), this.arrangement[y][x] as boolean);
+                    if(this.arrangement[y][x])
+                        this._game.setPins = this._game.getPins + 1;
                 }
+                else
+                    this._game.getBoard.slots[index] = new GenericSlot(x,y);
             }
-            return true;
         }
-        catch(e){
-            console.error(e);
-            return false;
-        }
+        return true;
     }
 
     get game() {
