@@ -1,4 +1,3 @@
-import { InfluencedSlot } from "../interfaces/influencedSlot";
 import { GenericSlot } from "../slot";
 import { SlotDecorator } from "./slotDecorator";
 
@@ -11,10 +10,7 @@ export class PlayableSlot extends SlotDecorator {
     }
     
     protected availableMoves: string[] = []
-    protected influencedSlots: InfluencedSlot = {
-        next: [],
-        aim: []
-    }
+    protected influencedSlots: Array<string[]> = [[],[],[],[]]
 
     get positionX(): number {
         return super.position_x;
@@ -44,7 +40,7 @@ export class PlayableSlot extends SlotDecorator {
         return this.influencedSlots;
     }
 
-    set setInfluencedSlots(slots: InfluencedSlot){
+    set setInfluencedSlots(slots: Array<string[]>){
         this.influencedSlots = slots;
     }
 }

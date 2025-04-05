@@ -1,8 +1,5 @@
 import { InitGame } from '../../../../../src/domain/use-cases/init-game'
-import { Board } from '../../../../../src/domain/entities/board';
-import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { PlayableSlot } from '../../../../../src/domain/entities/decorators/playableSlotDecorator';
-import { Game } from '../../../../../src/domain/entities/game'
 
 describe("InitGame class", () => {
     test("create new game", () => {
@@ -135,13 +132,10 @@ describe("InitGame class", () => {
 
         const result = initGame.fillInfluencedSlots();
 
-        console.log((initGame.getBoard().slots["2,1"] as PlayableSlot).getInfluencedSlots.aim)
-
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": ["0,1"], "next": ["2,2","1,1"]})
-        expect((initGame.getBoard().slots["2,1"] as PlayableSlot).getInfluencedSlots.aim).toStrictEqual(["0,1"])
-        expect((initGame.getBoard().slots["2,1"] as PlayableSlot).getInfluencedSlots.next).toStrictEqual(["2,2","1,1"])
+        expect(mocked).toHaveBeenCalledWith([[], ["2,2"], ["1,1", "0,1"], []])
+        expect((initGame.getBoard().slots["2,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], ["2,2"], ["1,1", "0,1"], []])
     });
 
     test("fill influenced slots for a slot surrounded by generic slots", () => {
@@ -159,9 +153,8 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
-        expect((initGame.getBoard().slots["1,1"] as PlayableSlot).getInfluencedSlots.aim).toStrictEqual([])
-        expect((initGame.getBoard().slots["1,1"] as PlayableSlot).getInfluencedSlots.next).toStrictEqual([])
+        expect(mocked).toHaveBeenCalledWith([[], [], [], []])
+        expect((initGame.getBoard().slots["1,1"] as PlayableSlot).getInfluencedSlots).toStrictEqual([[], [], [], []])
     });
 
     test("fill influenced slots for a slot with multiple neighbors", () => {
@@ -170,7 +163,7 @@ describe("InitGame class", () => {
             [true, true, true, true, true],
             [true, true, true, true, true],
             [true, true, true, true, true],
-            [true, true, true, true, true],
+            [true, true, null, true, true],
         ];
 
         const initGame = new InitGame(5, 5, testArrangement);
@@ -182,8 +175,7 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": ["2,0","2,4","0,2","4,2"], "next": ["2,1","2,3","1,2","3,2"]})
-        expect((initGame.getBoard().slots["2,2"] as PlayableSlot).getInfluencedSlots.aim).toStrictEqual(["2,0","2,4","0,2","4,2"])
-        expect((initGame.getBoard().slots["2,2"] as PlayableSlot).getInfluencedSlots.next).toStrictEqual(["2,1","2,3","1,2","3,2"])
+        expect(mocked).toHaveBeenCalledWith([["2,1", "2,0"], ["2,3", "2,4"], ["1,2", "0,2"], ["3,2"]])
+        expect((initGame.getBoard().slots["2,2"] as PlayableSlot).getInfluencedSlots).toStrictEqual([["2,1", "2,0"], ["2,3", "2,4"], ["1,2", "0,2"], ["3,2"]])
     });
 })

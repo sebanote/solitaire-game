@@ -2,7 +2,6 @@ import { InitGame } from '../../../../../src/domain/use-cases/init-game'
 import { Board } from '../../../../../src/domain/entities/board';
 import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { PlayableSlot } from '../../../../../src/domain/entities/decorators/playableSlotDecorator';
-import { InfluencedSlot } from '../../../../../src/domain/entities/interfaces/influencedSlot';
 import { Game } from '../../../../../src/domain/entities/game'
 
 
@@ -41,7 +40,7 @@ jest.mock("../../../../../src/domain/entities/decorators/playableSlotDecorator",
                 position_x: 1,
                 position_y: 2,
                 isTaken: jest.fn().mockReturnValue(true),
-                set setInfluencedSlots (influenced: InfluencedSlot){
+                set setInfluencedSlots (influenced: Array<string[]>){
                     this.influencedSlots = influenced
                 }
             }
@@ -195,7 +194,7 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+        expect(mocked).toHaveBeenCalledWith([[], [], [], []])
     });
 
     test("fill influenced slots for a slot surrounded by generic slots", () => {
@@ -213,7 +212,7 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+        expect(mocked).toHaveBeenCalledWith([[], [], [], []])
     });
 
     test("fill influenced slots for a single slot board", () => {
@@ -229,7 +228,7 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+        expect(mocked).toHaveBeenCalledWith([[], [], [], []])
     });
 
     test("fill influenced slots for a slot with multiple neighbors", () => {
@@ -250,6 +249,6 @@ describe("InitGame class", () => {
 
         expect(result).toBe(true)
         expect(mocked).toHaveBeenCalledTimes(1)
-        expect(mocked).toHaveBeenCalledWith({"aim": [], "next": []})
+        expect(mocked).toHaveBeenCalledWith([[], [], [], []])
     });
 })

@@ -24,7 +24,10 @@ jest.mock('../../../../../src/domain/entities/game', () => {
                 set setPins(pin: number) {
                     this.pins = pin
                 },
-                performMove: jest.fn()
+                performMove: jest.fn(),
+                get getBoard () {
+                    return board;
+                }
             }
         })
     }
@@ -33,7 +36,22 @@ jest.mock('../../../../../src/domain/entities/decorators/playableSlotDecorator',
     return {
         PlayableSlot: jest.fn().mockImplementation(() => {
             return {
-                getAvailableMoves: jest.fn().mockReturnValue(['0,0','0,1','2,1'])
+                getAvailableMoves: jest.fn().mockReturnValue(['0,0','0,1','2,1']),
+                setAvailableMoves: jest.fn().mockImplementation((arg:any) => {
+                    return arg
+                }),
+                get getInfluencedSlots () {
+                    return [['0,0','0,1'],['2,1'],[],[]]
+                },
+                isTaken: jest.fn().mockReturnValueOnce(true)
+                .mockReturnValueOnce(false)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
+                .mockReturnValueOnce(true)
             }
         })
     }
@@ -62,15 +80,15 @@ jest.mock('../../../../../src/domain/entities/board', () => {
                 getHeight: x,
                 getWidth: y,
                 slots: {
-                    '0,0': new GenericSlot(0,0),
-                    '0,1': new PlayableSlot(new GenericSlot(0,1), true),
-                    '0,2': new PlayableSlot(new GenericSlot(1,1), true),
+                    '0,0': new PlayableSlot(new GenericSlot(0,0), true),
+                    '0,1': new PlayableSlot(new GenericSlot(0,1), false),
+                    '0,2': new PlayableSlot(new GenericSlot(0,2), true),
                     '1,0': new PlayableSlot(new GenericSlot(1,0), true),
                     '1,1': new PlayableSlot(new GenericSlot(1,1), true),
-                    '1,2': new PlayableSlot(new GenericSlot(1,1), true),
-                    '2,0': new PlayableSlot(new GenericSlot(1,1), true),
-                    '2,1': new PlayableSlot(new GenericSlot(1,1), true),
-                    '2,2': new PlayableSlot(new GenericSlot(1,1), true)
+                    '1,2': new PlayableSlot(new GenericSlot(1,2), true),
+                    '2,0': new PlayableSlot(new GenericSlot(2,0), true),
+                    '2,1': new PlayableSlot(new GenericSlot(2,1), true),
+                    '2,2': new PlayableSlot(new GenericSlot(2,2), true)
                 }
             }
         })
@@ -208,6 +226,126 @@ describe('UpdateGame class', () => {
         expect(Move).toHaveBeenCalledWith(removedMove.movingTo, removedMove.movingFrom);
         expect(MakeMove).toHaveBeenCalledWith(expect.any(Object), game.getBoard);
         expect(game.getPins).toBe(101); 
+    });
+
+    test('update available moves for a particular slot', () => {
+        const game = new Game(new Board(3,3));
+        const move = new Move('0,0','0,0');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        updateGame.updateAvailableMoves(['2,1']);
+
+        expect((game.getBoard.slots['2,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['2,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+
+    })
+
+    test('update available moves for three slots involved in a move', () => {
+        const game = new Game(new Board(3,3));
+        const move = new Move('0,0','0,2');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        updateGame.updateAvailableMoves(['0,0','0,1','0,2']);
+
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+        expect((game.getBoard.slots['0,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,1'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+        expect((game.getBoard.slots['0,2'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,2'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+    })
+
+    test('update available moves for specific slots with valid influenced slots', () => {
+        const game = new Game(new Board(3, 3));
+        const move = new Move('0,0', '0,2');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['0,1', '0,2'],
+            ['1,0', '1,1']
+        ]);
+        jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+        jest.spyOn(game.getBoard.slots['0,2'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+        jest.spyOn(game.getBoard.slots['1,0'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+        jest.spyOn(game.getBoard.slots['1,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+
+        updateGame.updateAvailableMoves(['0,0']);
+
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+    });
+
+    test('update available moves for all slots when no slots are specified', () => {
+        const game = new Game(new Board(3, 3));
+        const move = new Move('0,0', '0,2');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['0,1', '0,2']
+        ]);
+        jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+        jest.spyOn(game.getBoard.slots['0,2'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+
+        jest.spyOn(game.getBoard.slots['1,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['1,1', '1,2']
+        ]);
+        jest.spyOn(game.getBoard.slots['1,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+        jest.spyOn(game.getBoard.slots['1,2'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+
+        updateGame.updateAvailableMoves();
+
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+        expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+    });
+
+    test('update available moves when no influenced slots are valid', () => {
+        const game = new Game(new Board(3, 3));
+        const move = new Move('0,0', '0,2');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['0,1', '0,2']
+        ]);
+        jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+        jest.spyOn(game.getBoard.slots['0,2'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+
+        updateGame.updateAvailableMoves(['0,0']);
+
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+    });
+
+    test('update available moves for multiple slots with mixed valid and invalid influenced slots', () => {
+        const game = new Game(new Board(3, 3));
+        const move = new Move('0,0', '0,2');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+
+        jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['0,1', '0,2']
+        ]);
+        jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+        jest.spyOn(game.getBoard.slots['0,2'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+
+        jest.spyOn(game.getBoard.slots['1,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
+            ['1,1', '1,2']
+        ]);
+        jest.spyOn(game.getBoard.slots['1,1'] as PlayableSlot, 'isTaken').mockReturnValue(false);
+        jest.spyOn(game.getBoard.slots['1,2'] as PlayableSlot, 'isTaken').mockReturnValue(true);
+
+        updateGame.updateAvailableMoves(['0,0', '1,0']);
+
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['0,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
+        expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
+        expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
     });
 
 })

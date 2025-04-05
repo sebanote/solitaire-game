@@ -1,6 +1,7 @@
 import { Game } from '../../domain/entities/game'
 import { MakeMove } from './make-move';
 import { Move } from '../entities/move';
+import { PlayableSlot } from '../entities/decorators/playableSlotDecorator';
 
 export class UpdateGame {
 
@@ -48,5 +49,27 @@ export class UpdateGame {
             rollBackMove.performMove()
             this.restoreOnePin();
         }
+    }
+
+    updateAvailableMoves(slots?: string[]){
+
+        const slotsToEvaluate = slots ? slots : Object.keys(this.game.getBoard.slots)
+
+        for(const slot of slotsToEvaluate){
+            const availableMoves: string[] = [] 
+            const influencedSlots = (this.game.getBoard.slots[slot] as PlayableSlot).getInfluencedSlots
+
+            for(const influencedSlot of influencedSlots){
+                if(influencedSlot[1]){
+                    if((this.game.getBoard.slots[influencedSlot[0]] as PlayableSlot).isTaken && !(this.game.getBoard.slots[influencedSlot[1]] as PlayableSlot).isTaken){
+                        availableMoves.push(influencedSlot[1])
+                    }
+                }
+            }
+
+            (this.game.getBoard.slots[slot] as PlayableSlot).setAvailableMoves(availableMoves)
+
+        } 
+      
     }
 }

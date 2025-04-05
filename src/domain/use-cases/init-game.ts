@@ -61,8 +61,7 @@ export class InitGame {
 
             const board = (this.board as Board);
 
-            const next: string[] = [];
-            const aim: string[] = [];
+            const influenced: Array<string[]> = [[],[],[],[]]
 
             const slotPosition = slot.split(',')
 
@@ -80,32 +79,32 @@ export class InitGame {
             const aim_down_y = slot_y + 2 <= max_y ? slot_y + 2 : -1;
 
             if(next_left_x > -1 && board.slots[slot_y + ',' + next_left_x] instanceof PlayableSlot){
-                next.push(slot_y + ',' + next_left_x);
+                influenced[0][0] = slot_y + ',' + next_left_x
             }
             if(next_right_x > -1 && board.slots[slot_y + ',' + next_right_x] instanceof PlayableSlot){
-                next.push(slot_y + ',' + next_right_x );
+                influenced[1][0] = slot_y + ',' + next_right_x
             }
             if(next_up_y > -1 && board.slots[next_up_y + ',' + slot_x] instanceof PlayableSlot){
-                next.push(next_up_y + ',' + slot_x);
+                influenced[2][0] = next_up_y + ',' + slot_x
             }
             if(next_down_y > -1 && board.slots[next_down_y + ',' + slot_x] instanceof PlayableSlot){
-                next.push(next_down_y + ',' + slot_x); 
+                influenced[3][0] = next_down_y + ',' + slot_x
             }
 
             if(aim_left_x > -1 && board.slots[slot_y + ',' + aim_left_x] instanceof PlayableSlot){
-                aim.push(slot_y + ',' + aim_left_x);
+                influenced[0][1] = slot_y + ',' + aim_left_x
             }
             if(aim_right_x > -1 && board.slots[slot_y + ',' + aim_right_x] instanceof PlayableSlot){
-                aim.push(slot_y + ',' + aim_right_x);
+                influenced[1][1] = slot_y + ',' + aim_right_x
             }
             if(aim_up_y > -1 && board.slots[aim_up_y + ',' + slot_x] instanceof PlayableSlot){
-                aim.push(aim_up_y + ',' + slot_x); 
+                influenced[2][1] = aim_up_y + ',' + slot_x
             }
             if(aim_down_y > -1 && board.slots[aim_down_y + ',' + slot_x] instanceof PlayableSlot){
-                aim.push(aim_down_y + ',' + slot_x); 
+                influenced[3][1] = aim_down_y + ',' + slot_x
             }
 
-            (board.slots[slot] as PlayableSlot).setInfluencedSlots = {next:next, aim:aim}
+            (board.slots[slot] as PlayableSlot).setInfluencedSlots = influenced
         }
         return true;
     }

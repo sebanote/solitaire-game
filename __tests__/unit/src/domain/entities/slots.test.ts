@@ -8,8 +8,8 @@ describe("GenericSlot class", () => {
 
         const testSlot = new GenericSlot(1,2);
 
-        expect(testSlot.position_x).toEqual(1);
-        expect(testSlot.position_y).toEqual(2);
+        expect(testSlot.position_x).toEqual(2);
+        expect(testSlot.position_y).toEqual(1);
 
     })
 })
@@ -46,7 +46,7 @@ describe("PlayableSlot class", () => {
 
         const position_x = playableSlot.positionX;
 
-        expect(position_x).toBe(1);
+        expect(position_x).toBe(2);
     })
 
     test("get PlayableSlot position_y", () => {
@@ -55,7 +55,7 @@ describe("PlayableSlot class", () => {
 
         const position_y = playableSlot.positionY;
 
-        expect(position_y).toBe(2);
+        expect(position_y).toBe(1);
     })
 
     test("set PlayableSlot as taken", () => {
@@ -97,14 +97,14 @@ describe("PlayableSlot class", () => {
 
         const influencedSlots = playableSlot.getInfluencedSlots;
 
-        expect(influencedSlots).toEqual({"aim": [], "next": []})
+        expect(influencedSlots).toEqual([[],[],[],[]])
     })
     test('set influenced slots', () => {
         const playableSlot = new PlayableSlot(new GenericSlot(1,2),true);
 
-        playableSlot.setInfluencedSlots = {next:['1,1','0,2','2,2'], aim: []};
+        playableSlot.setInfluencedSlots = [["2,0"],["2,2"],["1,1","0,1"],[]];
 
-        expect(playableSlot.getInfluencedSlots).toEqual({next:['1,1','0,2','2,2'], aim: []})
+        expect(playableSlot.getInfluencedSlots).toEqual([["2,0"],["2,2"],["1,1","0,1"],[]])
     })
 
 })
