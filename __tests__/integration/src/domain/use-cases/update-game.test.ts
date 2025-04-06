@@ -71,25 +71,6 @@ describe('UpdateGame class', () => {
         expect(updateGame.getGame.getMoves[0].movingFrom).toBe('2,1')
         expect(updateGame.getGame.getMoves[0].movingTo).toBe('0,1')
     })
-    test('add new move should fail if move not allowed', () => {
-        const testArrangement = [
-            [true,false,true],
-            [true,true,true],
-            [true,true,true],
-        ]
-
-        const initGame = new InitGame(3,3,testArrangement)
-        initGame.setBoard()
-        initGame.fillInfluencedSlots()
-        const makeMove = new MakeMove(new Move('2,0','2,2'), initGame.game.getBoard)
-        const updateGame = new UpdateGame(initGame.game, makeMove)
-        updateGame.updateAvailableMoves()
-
-        const addMove = updateGame.addNewMove()
-
-        expect(updateGame.getGame.getMoves).toEqual([])
-        expect(addMove).toBe(false);
-    });
 
     test('rollback move', () => {
         const testArrangement = [
@@ -109,45 +90,6 @@ describe('UpdateGame class', () => {
         updateGame.removeOneMove();
 
         expect(updateGame.getGame.getMoves).toEqual([])
-    })
-
-    test('remove one pin on move', () => {
-        const testArrangement = [
-            [true,false,true],
-            [true,true,true],
-            [true,true,true],
-        ]
-
-        const initGame = new InitGame(3,3,testArrangement)
-        initGame.setBoard()
-        initGame.fillInfluencedSlots()
-
-        const makeMove = new MakeMove(new Move('2,1','0,1'), initGame.game.getBoard)
-        const updateGame = new UpdateGame(initGame.game, makeMove)
-        updateGame.updateAvailableMoves()
-        updateGame.addNewMove()
-
-        expect(initGame.game.getPins).toEqual(7)
-    })
-
-    test('restore one pin on move rollback', () => {
-        const testArrangement = [
-            [true,false,true],
-            [true,true,true],
-            [true,true,true],
-        ]
-
-        const initGame = new InitGame(3,3,testArrangement)
-        initGame.setBoard()
-        initGame.fillInfluencedSlots()
-
-        const makeMove = new MakeMove(new Move('2,1','0,1'), initGame.game.getBoard)
-        const updateGame = new UpdateGame(initGame.game, makeMove)
-        updateGame.updateAvailableMoves()
-        updateGame.addNewMove()
-        updateGame.restoreOnePin()
-
-        expect(initGame.game.getPins).toEqual(8)
     })
 
     test('update board on move', () => {
@@ -271,5 +213,54 @@ describe('UpdateGame class', () => {
 
         expect(_setAvailableMoves).toHaveBeenCalledTimes(9);
         expect((initGame.game.getBoard.slots['2,1'] as PlayableSlot).getAvailableMoves()).toEqual(['0,1'])
+    });
+
+    test('find all involved slots', () => {
+        const testArrangement = [
+            [true, false, true],
+            [true, true, true],
+            [true, true, true],
+        ];
+
+        const initGame = new InitGame(3, 3, testArrangement);
+        initGame.setBoard();
+        initGame.fillInfluencedSlots();
+
+        const makeMove = new MakeMove(new Move('2,1', '0,1'), initGame.game.getBoard);
+        const updateGame = new UpdateGame(initGame.game, makeMove);
+
+        const involvedSlots = updateGame.findAllInvolvedSlots();
+
+        expect(involvedSlots).toContain('2,1');
+        expect(involvedSlots).toContain('1,1');
+        expect(involvedSlots).toContain('0,1');
+    });
+
+    test('update the game', () => {
+        const testArrangement = [
+            [true, false, true],
+            [true, true, true],
+            [true, true, true],
+        ];
+
+        const initGame = new InitGame(3, 3, testArrangement);
+        initGame.setBoard();
+        initGame.fillInfluencedSlots();
+
+        const makeMove = new MakeMove(new Move('2,1', '0,1'), initGame.game.getBoard);
+        const updateGame = new UpdateGame(initGame.game, makeMove);
+        updateGame.updateAvailableMoves()
+
+        const boardArrangement = updateGame.updateTheGame();
+
+        expect(boardArrangement).toEqual([
+            true, true, true,
+            true, false, true,
+            true, false, true,
+        ]);
+        expect(initGame.game.getPins).toEqual(7);
+        expect(updateGame.getGame.getMoves.length).toBe(1);
+        expect(updateGame.getGame.getMoves[0].movingFrom).toBe('2,1');
+        expect(updateGame.getGame.getMoves[0].movingTo).toBe('0,1');
     });
 })

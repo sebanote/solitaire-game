@@ -16,12 +16,7 @@ export class UpdateGame {
     }
 
     addNewMove() {
-        if(this.makeMove.isMoveAllowed()){
-            this.game.addMove(this.makeMove.getMove);
-            this.removeOnePin()
-            return true;
-        }
-        return false;
+        this.game.addMove(this.makeMove.getMove);
     }
 
     removeOneMove() {
@@ -74,9 +69,9 @@ export class UpdateGame {
     }
 
     findAllInvolvedSlots() {
-        const allInvolvedSlots = [this.makeMove.getMove.movingFrom, this.getMakeMove.findMidSlot(), this.makeMove.getMove.movingTo]
-
-        for(const involvedSlot of allInvolvedSlots){
+        const slotsInMove = [this.makeMove.getMove.movingFrom, this.getMakeMove.findMidSlot(), this.makeMove.getMove.movingTo]
+        const allInvolvedSlots = []
+        for(const involvedSlot of slotsInMove){
             for(const slotGroup of (this.game.getBoard.slots[involvedSlot] as PlayableSlot).getInfluencedSlots){
                 for(const slot of slotGroup){
                     allInvolvedSlots.push(slot)
@@ -87,16 +82,17 @@ export class UpdateGame {
     }
 
     updateTheGame(): boolean[] {
-        this.addNewMove()
-        this.updateBoard()
-        this.removeOnePin()
-
-        this.updateAvailableMoves(this.findAllInvolvedSlots())
-        
-        const boardArrangement = []
-        for(const slot of Object.keys(this.game.getBoard.slots)){
-            boardArrangement.push((this.game.getBoard.slots[slot] as PlayableSlot).isTaken())
+        if(this.makeMove.isMoveAllowed()){
+            this.addNewMove()
+            this.updateBoard()
+            this.removeOnePin()
+            this.updateAvailableMoves(this.findAllInvolvedSlots())
+            const boardArrangement = []
+            for(const slot of Object.keys(this.game.getBoard.slots)){
+                boardArrangement.push((this.game.getBoard.slots[slot] as PlayableSlot).isTaken())
+            }
+            return boardArrangement
         }
-        return boardArrangement
+        else return []
     }
 }

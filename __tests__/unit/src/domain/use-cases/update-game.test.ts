@@ -144,24 +144,7 @@ describe('UpdateGame class', () => {
 
         updateGame.addNewMove()
 
-        expect(makeMove.isMoveAllowed).toHaveBeenCalledTimes(1);
-        expect(makeMove.isMoveAllowed()).toBe(true);
         expect(game.addMove).toHaveBeenCalledTimes(1);
-    })
-    test('add new move should fail if move not allowed', () => {
-        const game = new Game(new Board(3,3))
-        const move = new Move('0,0','0,2');
-        const makeMove = new MakeMove(move,game.getBoard)
-        const updateGame = new UpdateGame(game, makeMove);
-
-        //uses spyOn to ovewrite the default mocked function
-        jest.spyOn(makeMove, 'isMoveAllowed').mockImplementation(() => false);
-
-        updateGame.addNewMove()
-
-        expect(makeMove.isMoveAllowed).toHaveBeenCalledTimes(1);
-        expect(makeMove.isMoveAllowed()).toBe(false);
-        expect(game.addMove).toHaveBeenCalledTimes(0);
     })
     test('rollback move', () => {
         const game = new Game(new Board(3,3))
