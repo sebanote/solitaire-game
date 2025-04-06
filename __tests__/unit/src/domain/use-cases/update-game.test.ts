@@ -343,4 +343,32 @@ describe('UpdateGame class', () => {
         expect(makeMove.findMidSlot).toHaveBeenCalledTimes(1)
     })
 
+    test('update game on allowed move', () => {
+        const game = new Game(new Board(3,3));
+        const move = new Move('2,1','0,1');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+        updateGame.updateAvailableMoves();
+
+        const updated = updateGame.updateTheGame();
+
+        expect(updated).not.toBe([])
+        expect(updateGame.getMakeMove.isMoveAllowed()).toBe(true)
+    })
+
+    test('update game on not allowed move', () => {
+        const game = new Game(new Board(3,3));
+        const move = new Move('2,2','2,0');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+        updateGame.updateAvailableMoves();
+
+        const mockRejected = jest.spyOn(updateGame.getMakeMove, 'isMoveAllowed').mockReturnValue(false)
+
+        const updated = updateGame.updateTheGame();
+
+        expect(mockRejected).toHaveBeenCalledTimes(1)
+        expect(updated).toEqual([])
+    })
+
 })
