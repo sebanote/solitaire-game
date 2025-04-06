@@ -1,7 +1,6 @@
 import { Board } from '../../../../../src/domain/entities/board';
 import { PlayableSlot } from '../../../../../src/domain/entities/decorators/playableSlotDecorator';
 import { Move } from '../../../../../src/domain/entities/move';
-import { GenericSlot } from '../../../../../src/domain/entities/slot';
 import { MakeMove } from '../../../../../src/domain/use-cases/make-move';
 import { InitGame } from '../../../../../src/domain/use-cases/init-game';
 import { UpdateGame } from '../../../../../src/domain/use-cases/update-game'

@@ -71,6 +71,32 @@ export class UpdateGame {
             (this.game.getBoard.slots[slot] as PlayableSlot).setAvailableMoves(availableMoves)
 
         } 
-      
+    }
+
+    findAllInvolvedSlots() {
+        const allInvolvedSlots = [this.makeMove.getMove.movingFrom, this.getMakeMove.findMidSlot(), this.makeMove.getMove.movingTo]
+
+        for(const involvedSlot of allInvolvedSlots){
+            for(const slotGroup of (this.game.getBoard.slots[involvedSlot] as PlayableSlot).getInfluencedSlots){
+                for(const slot of slotGroup){
+                    allInvolvedSlots.push(slot)
+                }
+            }
+        }
+        return allInvolvedSlots;
+    }
+
+    updateTheGame(): boolean[] {
+        this.addNewMove()
+        this.updateBoard()
+        this.removeOnePin()
+
+        this.updateAvailableMoves(this.findAllInvolvedSlots())
+        
+        const boardArrangement = []
+        for(const slot of Object.keys(this.game.getBoard.slots)){
+            boardArrangement.push((this.game.getBoard.slots[slot] as PlayableSlot).isTaken())
+        }
+        return boardArrangement
     }
 }

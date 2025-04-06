@@ -6,7 +6,7 @@ import { Slot  } from '../entities/slot';
 export class MakeMove {
 
     constructor(private move: Move, private board: Board){
-        this.midSlot = this.board.slots[this.findMidSlot(this.move.movingFrom, this.move.movingTo)];
+        this.midSlot = this.board.slots[this.findMidSlot()];
     }
 
     private midSlot: Slot;
@@ -26,9 +26,9 @@ export class MakeMove {
         return false;
     }
 
-    findMidSlot(orig:string, dest:string): string {
-         const from = orig.split(',');
-         const to = dest.split(',')
+    findMidSlot(): string {
+         const from = this.move.movingFrom.split(',');
+         const to = this.move.movingTo.split(',')
 
          const from_x = +from[0]
          const from_y = +from[1]

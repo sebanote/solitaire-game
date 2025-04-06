@@ -108,7 +108,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('1,0','1,2'), new Board(3,3))
 
-        const midSlot = testMove.findMidSlot(testMove.getMove.movingFrom, testMove.getMove.movingTo);
+        const midSlot = testMove.findMidSlot();
 
         expect(midSlot).toBe('1,1')
 
@@ -117,7 +117,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('1,2','1,0'), new Board(3,3))
 
-        const midSlot = testMove.findMidSlot(testMove.getMove.movingFrom, testMove.getMove.movingTo);
+        const midSlot = testMove.findMidSlot();
 
         expect(midSlot).toBe('1,1')
 
@@ -126,7 +126,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('0,1','2,1'), new Board(3,3))
 
-        const midSlot = testMove.findMidSlot(testMove.getMove.movingFrom, testMove.getMove.movingTo);
+        const midSlot = testMove.findMidSlot();
 
         expect(midSlot).toBe('1,1')
 
@@ -135,7 +135,7 @@ describe('MakeMove class', () => {
 
         const testMove = new MakeMove(new Move('2,1','0,1'), new Board(3,3))
 
-        const midSlot = testMove.findMidSlot(testMove.getMove.movingFrom, testMove.getMove.movingTo);
+        const midSlot = testMove.findMidSlot();
 
         expect(midSlot).toBe('1,1')
 
