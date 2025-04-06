@@ -96,15 +96,14 @@ jest.mock('../../../../../src/domain/entities/board', () => {
 })
 jest.mock('../../../../../src/domain/use-cases/make-move', () => {
     return {
-        MakeMove: jest.fn().mockImplementation(() => {
+        MakeMove: jest.fn().mockImplementation((move) => {
             return {
-                getMove: jest.fn().mockImplementation(() => {
-                    return {
-                        move: new Move('8,8','8,9')
-                    }
-                }),
+                get getMove() {
+                    return move
+                },
                 isMoveAllowed: jest.fn().mockReturnValue(true),
-                performMove: jest.fn()
+                performMove: jest.fn(),
+                findMidSlot: jest.fn().mockReturnValue('1,1')
             }
         })
     }
@@ -330,5 +329,18 @@ describe('UpdateGame class', () => {
         expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledTimes(1);
         expect((game.getBoard.slots['1,0'] as PlayableSlot).setAvailableMoves).toHaveBeenCalledWith([]);
     });
+
+    test('find all involved slots', () => {
+        const game = new Game(new Board(3,3));
+        const move = new Move('2,1','0,1');
+        const makeMove = new MakeMove(move, game.getBoard);
+        const updateGame = new UpdateGame(game, makeMove);
+        updateGame.updateAvailableMoves();
+
+        const involved = updateGame.findAllInvolvedSlots();
+
+        expect(involved).toEqual(["0,0","0,1","2,1",])
+        expect(makeMove.findMidSlot).toHaveBeenCalledTimes(1)
+    })
 
 })

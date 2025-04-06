@@ -69,12 +69,14 @@ export class UpdateGame {
     }
 
     findAllInvolvedSlots() {
-        const slotsInMove = [this.makeMove.getMove.movingFrom, this.getMakeMove.findMidSlot(), this.makeMove.getMove.movingTo]
-        const allInvolvedSlots = []
+        const slotsInMove = [this.makeMove.getMove.movingFrom, this.makeMove.findMidSlot(), this.makeMove.getMove.movingTo]
+        const allInvolvedSlots: string[] = []
         for(const involvedSlot of slotsInMove){
             for(const slotGroup of (this.game.getBoard.slots[involvedSlot] as PlayableSlot).getInfluencedSlots){
                 for(const slot of slotGroup){
-                    allInvolvedSlots.push(slot)
+                    if(!allInvolvedSlots.includes(slot)){
+                        allInvolvedSlots.push(slot)
+                    }
                 }
             }
         }
