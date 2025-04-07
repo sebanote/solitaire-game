@@ -89,6 +89,7 @@ export class UpdateGame {
             this.updateBoard()
             this.removeOnePin()
             this.updateAvailableMoves(this.findAllInvolvedSlots())
+            this.game.possibleMoves = this.updatePossibleMoves()
             const boardArrangement = []
             for(const slot of Object.keys(this.game.getBoard.slots)){
                 boardArrangement.push((this.game.getBoard.slots[slot] as PlayableSlot).isTaken())
@@ -96,5 +97,26 @@ export class UpdateGame {
             return boardArrangement
         }
         else return []
+    }
+
+    updatePossibleMoves() {
+        const slots = Object.keys(this.game.getBoard.slots)
+        let possibleMoves = 0
+
+        for(const slot of slots){
+            const slotProps = this.game.getBoard.slots[slot]
+            if(slotProps instanceof PlayableSlot && slotProps.isTaken()){
+                    possibleMoves += slotProps.getAvailableMoves().length
+            }
+        }
+
+        return possibleMoves
+    }
+
+    isGameFinished():boolean{
+        if(this.game.possibleMoves == 0){
+            return true
+        }
+        return false
     }
 }

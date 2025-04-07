@@ -3,7 +3,7 @@ import { Move } from '../entities/move'
 
 export class Game {
     private moves: Move[] = [];
-    private possibleMoves: number = 100;
+    private _possibleMoves: number = 0;
     private pins: number = 0;
 
     constructor(private board: Board){}
@@ -32,5 +32,13 @@ export class Game {
         if (this.moves.length > 0) {
             return this.moves.pop();
         }
+    }
+
+    get possibleMoves(){
+        return this._possibleMoves;
+    }
+
+    set possibleMoves(moves:number){
+        this._possibleMoves = moves;
     }
 }
