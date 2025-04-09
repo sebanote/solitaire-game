@@ -43,15 +43,9 @@ jest.mock('../../../../../src/domain/entities/board', () => {
                 getHeight: x,
                 getWidth: y,
                 slots: {
-                    '0,0': new GenericSlot(0,0),
                     '0,1': new PlayableSlot(new GenericSlot(0,1), true),
-                    '0,2': new PlayableSlot(new GenericSlot(0,2), false),
-                    '1,0': new PlayableSlot(new GenericSlot(1,0), false),
                     '1,1': new PlayableSlot(new GenericSlot(1,1), true),
-                    '1,2': new PlayableSlot(new GenericSlot(1,2), false),
-                    '2,0': new PlayableSlot(new GenericSlot(2,0), false),
                     '2,1': new PlayableSlot(new GenericSlot(2,1), false),
-                    '2,2': new PlayableSlot(new GenericSlot(2,2), true)
                 },
                 findMidSlot: jest.fn().mockReturnValue({
                     setTaken: jest.fn()
@@ -90,7 +84,9 @@ describe('MakeMove class', () => {
     })
     test('intended move is allowed', () => {
 
-        const testMove = new MakeMove(new Move('0,1','2,1'), new Board(3,3))
+        const testMove = new MakeMove(new Move('0,1','2,1'), new Board(3,1))
+
+        Object.setPrototypeOf(testMove.getBoard.slots['0,1'],PlayableSlot.prototype)
 
         const availableMove = testMove.isMoveAllowed();
 
@@ -99,6 +95,8 @@ describe('MakeMove class', () => {
     test('intended move is not allowed', () => {
 
         const testMove = new MakeMove(new Move('0,1','1,1'), new Board(3,3))
+
+        Object.setPrototypeOf(testMove.getBoard.slots['0,1'],PlayableSlot.prototype)
 
         const availableMove = testMove.isMoveAllowed();
 
@@ -143,6 +141,8 @@ describe('MakeMove class', () => {
     test('perform allowed move', () => {
 
         const testMove = new MakeMove(new Move('2,1','0,1'), new Board(3,3))
+
+        Object.setPrototypeOf(testMove.getBoard.slots['2,1'],PlayableSlot.prototype)
 
         const moved = testMove.performMove(false)
 

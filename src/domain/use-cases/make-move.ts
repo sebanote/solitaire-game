@@ -20,10 +20,14 @@ export class MakeMove {
     }
 
     isMoveAllowed(): boolean {
-        const availableMoves = (this.board.slots[this.move.movingFrom] as PlayableSlot).getAvailableMoves();
-        if(availableMoves.includes(this.move.movingTo))
-            return true;
-        return false;
+        const slot = this.board.slots[this.move.movingFrom]
+        if(slot instanceof PlayableSlot){
+            const availableMoves = (this.board.slots[this.move.movingFrom] as PlayableSlot).getAvailableMoves();
+            if(availableMoves.includes(this.move.movingTo))
+                return true;
+            return false;
+        }
+        return false   
     }
 
     findMidSlot(): string {
