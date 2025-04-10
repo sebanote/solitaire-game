@@ -53,18 +53,19 @@ export class UpdateGame {
 
         for(const slot of slotsToEvaluate){
             const availableMoves: string[] = [] 
-            const influencedSlots = (this.game.getBoard.slots[slot] as PlayableSlot).getInfluencedSlots
+            if(this.game.getBoard.slots[slot] instanceof PlayableSlot){
+                const influencedSlots = this.game.getBoard.slots[slot].getInfluencedSlots
 
-            for(const influencedSlot of influencedSlots){
-                if(influencedSlot[1]){
-                    if((this.game.getBoard.slots[influencedSlot[0]] as PlayableSlot).isTaken() && !(this.game.getBoard.slots[influencedSlot[1]] as PlayableSlot).isTaken()){
-                        availableMoves.push(influencedSlot[1])
+                for(const influencedSlot of influencedSlots){
+                    if(influencedSlot[1]){
+                        if((this.game.getBoard.slots[influencedSlot[0]] as PlayableSlot).isTaken() && !(this.game.getBoard.slots[influencedSlot[1]] as PlayableSlot).isTaken()){
+                            availableMoves.push(influencedSlot[1])
+                        }
                     }
                 }
+    
+                (this.game.getBoard.slots[slot] as PlayableSlot).setAvailableMoves(availableMoves)
             }
-
-            (this.game.getBoard.slots[slot] as PlayableSlot).setAvailableMoves(availableMoves)
-
         } 
     }
 
@@ -83,20 +84,31 @@ export class UpdateGame {
         return allInvolvedSlots;
     }
 
-    updateTheGame(): boolean[] {
+    updateTheGame(): Array<Array<null | boolean >> {
         if(this.makeMove.isMoveAllowed()){
             this.addNewMove()
             this.updateBoard()
             this.removeOnePin()
             this.updateAvailableMoves(this.findAllInvolvedSlots())
             this.game.possibleMoves = this.updatePossibleMoves()
-            const boardArrangement = []
-            for(const slot of Object.keys(this.game.getBoard.slots)){
-                boardArrangement.push((this.game.getBoard.slots[slot] as PlayableSlot).isTaken())
+            const boardArrangement = new Array(this.game.getBoard.getHeight).fill(null).map(() => new Array(this.game.getBoard.getWidth).fill(null));
+
+            for (const slot of Object.keys(this.game.getBoard.slots)) {
+                const slotProps = this.game.getBoard.slots[slot];
+                const [row, col] = slot.split(',').map(Number); 
+
+                if (slotProps instanceof PlayableSlot) {
+                    boardArrangement[row][col] = slotProps.isTaken();
+                } else {
+                    boardArrangement[row][col] = null;
+                }
             }
-            return boardArrangement
+            return boardArrangement;
         }
-        else return []
+        else {
+            console.log('invalid move...')
+            return []
+        }
     }
 
     updatePossibleMoves() {

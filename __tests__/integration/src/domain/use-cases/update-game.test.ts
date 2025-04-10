@@ -253,9 +253,9 @@ describe('UpdateGame class', () => {
         const boardArrangement = updateGame.updateTheGame();
 
         expect(boardArrangement).toEqual([
-            true, true, true,
-            true, false, true,
-            true, false, true,
+            [true, true, true],
+            [true, false, true],
+            [true, false, true]
         ]);
         expect(initGame.game.getPins).toEqual(7);
         expect(updateGame.getGame.getMoves.length).toBe(1);

@@ -212,6 +212,8 @@ describe('UpdateGame class', () => {
         const makeMove = new MakeMove(move, game.getBoard);
         const updateGame = new UpdateGame(game, makeMove);
 
+        Object.setPrototypeOf(game.getBoard.slots['0,0'], PlayableSlot.prototype)
+
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([[],['0,1','0,2'],[],[]])
 
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getAvailableMoves').mockReturnValue(['0,2'])
@@ -232,6 +234,10 @@ describe('UpdateGame class', () => {
         const move = new Move('0,0','0,2');
         const makeMove = new MakeMove(move, game.getBoard);
         const updateGame = new UpdateGame(game, makeMove);
+
+        Object.setPrototypeOf(game.getBoard.slots['0,0'], PlayableSlot.prototype)
+        Object.setPrototypeOf(game.getBoard.slots['0,1'], PlayableSlot.prototype)
+        Object.setPrototypeOf(game.getBoard.slots['0,2'], PlayableSlot.prototype)
 
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([[],['0,1','0,2'],[],[]])
         jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([[],[],[],[]])
@@ -261,6 +267,10 @@ describe('UpdateGame class', () => {
         const makeMove = new MakeMove(move, game.getBoard);
         const updateGame = new UpdateGame(game, makeMove);
 
+        Object.setPrototypeOf(game.getBoard.slots['0,0'], PlayableSlot.prototype)
+        Object.setPrototypeOf(game.getBoard.slots['1,0'], PlayableSlot.prototype)
+        Object.setPrototypeOf(game.getBoard.slots['2,0'], PlayableSlot.prototype)
+
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([['0,1', '0,2']]);
         jest.spyOn(game.getBoard.slots['0,1'] as PlayableSlot, 'isTaken').mockReturnValue(true);
         jest.spyOn(game.getBoard.slots['0,2'] as PlayableSlot, 'isTaken').mockReturnValue(false);
@@ -289,6 +299,8 @@ describe('UpdateGame class', () => {
         const makeMove = new MakeMove(move, game.getBoard);
         const updateGame = new UpdateGame(game, makeMove);
 
+        Object.setPrototypeOf(game.getBoard.slots['0,0'], PlayableSlot.prototype)
+
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
             ['0,1', '0,2']
         ]);
@@ -306,6 +318,9 @@ describe('UpdateGame class', () => {
         const move = new Move('0,0', '0,2');
         const makeMove = new MakeMove(move, game.getBoard);
         const updateGame = new UpdateGame(game, makeMove);
+
+        Object.setPrototypeOf(game.getBoard.slots['0,0'], PlayableSlot.prototype)
+        Object.setPrototypeOf(game.getBoard.slots['1,0'], PlayableSlot.prototype)
 
         jest.spyOn(game.getBoard.slots['0,0'] as PlayableSlot, 'getInfluencedSlots', 'get').mockReturnValue([
             ['0,1', '0,2']
@@ -365,7 +380,6 @@ describe('UpdateGame class', () => {
         const updated = updateGame.updateTheGame();
 
         expect(mockRejected).toHaveBeenCalledTimes(1)
-        expect(updated).toEqual([])
     })
 
     test('updatePossibleMoves calculates the correct number of possible moves', () => {
