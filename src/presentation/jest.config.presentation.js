@@ -3,6 +3,9 @@
 const config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.(ts|tsx)$': ['ts-jest', { tsconfig: './tsconfig.test.json' }],
+  },
   testMatch: [
     '**/src/**/__tests__/**/*.test.ts?(x)'
   ],
