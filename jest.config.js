@@ -1,16 +1,7 @@
 /** @type {import('jest').Config} */
 module.exports = {
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname'
-  ],
   preset: 'ts-jest',
   testEnvironment: 'node',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json',
-    },
-  },
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
@@ -23,5 +14,27 @@ module.exports = {
   roots: ['<rootDir>'],
   maxWorkers: '50%',
   detectOpenHandles: true,
-  forceExit: true
+  forceExit: true,
+  collectCoverage: true,
+  collectCoverageFrom: [
+    'src/domain/**/*.ts',
+    'src/presentation/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/*.d.ts'
+  ],
+  coverageDirectory: '<rootDir>/coverage',
+  coverageReporters: ['text', 'lcov'],
+  coverageThreshold: {
+    global: {
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80
+    }
+  },
+  watchPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  watchPlugins: [
+    'jest-watch-typeahead/filename',
+    'jest-watch-typeahead/testname'
+  ]
 };

@@ -1,57 +1,24 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig to read more about this file */
-
-    /* Projects */
-    "incremental": true,                                /* Save .tsbuildinfo files to allow for incremental compilation of projects. */
-
-    /* Language and Environment */
-    "target": "es5",                                    /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "lib": ["dom", "dom.iterable", "esnext"],           /* Specify a set of bundled library declaration files that describe the target runtime environment. */
-    "jsx": "preserve",                                  /* Specify what JSX code is generated. */
-
-    /* Modules */
-    "module": "esnext",                                 /* Specify what module code is generated. */
-    "moduleResolution": "bundler",                     /* Specify how TypeScript looks up a file from a given module specifier. */
-    "resolveJsonModule": true,                         /* Enable importing .json files. */
-    "types": ["jest", "node"],                         /* Specify type package names to be included without being referenced in a source file. */
-
-    /* JavaScript Support */
-    "allowJs": true,                                   /* Allow JavaScript files to be a part of your program. Use the 'checkJS' option to get errors from these files. */
-
-    /* Emit */
-    "sourceMap": true,                                 /* Create source map files for emitted JavaScript files. */
-    "outDir": "./dist/out-tsc",                        /* Specify an output folder for all emitted files. */
-    "noEmit": true,                                    /* Disable emitting files from a compilation. */
-    "noEmitOnError": true,                             /* Disable emitting files if any type checking errors are reported. */
-
-    /* Interop Constraints */
-    "esModuleInterop": true,                           /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables 'allowSyntheticDefaultImports' for type compatibility. */
-    "forceConsistentCasingInFileNames": true,          /* Ensure that casing is correct in imports. */
-    "isolatedModules": true,                           /* Ensure that each file can be safely transpiled without relying on other imports. */
-
-    /* Type Checking */
-    "strict": true,                                    /* Enable all strict type-checking options. */
-
-    /* Completeness */
-    "skipLibCheck": true,                              /* Skip type checking all .d.ts files. */
-
-    /* Plugins */
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
     "plugins": [
       {
         "name": "next"
       }
     ]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.js",
-    "src/**/*.jsx",
-    "src/**/*.mjs",
-    "src/**/*.json",
-    "src/**/__tests__/**/*",
-    "src/**/*.config.*"
-  ],
+  "include": ["src/**/*"],
   "exclude": ["node_modules"]
 }
