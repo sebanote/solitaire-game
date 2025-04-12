@@ -85,7 +85,9 @@ export class InitGame {
                 influenced[3][1] = aim_down_y + ',' + slot_x
             }
 
-            (board.slots[slot] as PlayableSlot).setInfluencedSlots = influenced
+            if (board.slots[slot] instanceof PlayableSlot) {
+                (board.slots[slot] as PlayableSlot).setInfluencedSlots = influenced;
+            }
         }
         return true;
     }

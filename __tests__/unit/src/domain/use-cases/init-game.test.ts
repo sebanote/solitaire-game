@@ -115,6 +115,8 @@ describe("InitGame class", () => {
         const initGame = new InitGame(3, 3, testArrangement);
         initGame.setBoard();
 
+        Object.setPrototypeOf(initGame.game.getBoard.slots['2,1'], PlayableSlot.prototype)
+
         const mocked = jest.spyOn((initGame.game.getBoard.slots['2,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
@@ -133,6 +135,9 @@ describe("InitGame class", () => {
 
         const initGame = new InitGame(3, 3, testArrangement);
         initGame.setBoard();
+
+        Object.setPrototypeOf(initGame.game.getBoard.slots['1,1'], PlayableSlot.prototype)
+
         const mocked = jest.spyOn((initGame.game.getBoard.slots['1,1'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
@@ -149,6 +154,9 @@ describe("InitGame class", () => {
 
         const initGame = new InitGame(1, 1, testArrangement);
         initGame.setBoard();
+
+        Object.setPrototypeOf(initGame.game.getBoard.slots['0,0'], PlayableSlot.prototype)
+
         const mocked = jest.spyOn((initGame.game.getBoard.slots['0,0'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
         const result = initGame.fillInfluencedSlots();
@@ -169,6 +177,8 @@ describe("InitGame class", () => {
 
         const initGame = new InitGame(5, 5, testArrangement);
         initGame.setBoard();
+
+        Object.setPrototypeOf(initGame.game.getBoard.slots['2,2'], PlayableSlot.prototype)
 
         const mocked = jest.spyOn((initGame.game.getBoard.slots['2,2'] as PlayableSlot), 'setInfluencedSlots', 'set' )
 
