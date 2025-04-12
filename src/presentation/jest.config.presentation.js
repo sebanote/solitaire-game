@@ -1,4 +1,6 @@
-module.exports = {
+/* eslint-env node */
+/** @type {import('jest').Config} */
+const config = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   testMatch: ['<rootDir>/__tests__/**/*.test.ts?(x)'],
@@ -13,3 +15,5 @@ module.exports = {
     'jest-watch-typeahead/testname'
   ]
 };
+
+export default config;

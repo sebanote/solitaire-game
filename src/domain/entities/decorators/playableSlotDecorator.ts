@@ -13,11 +13,11 @@ export class PlayableSlot extends SlotDecorator {
     protected influencedSlots: Array<string[]> = [[],[],[],[]]
 
     get positionX(): number {
-        return super.position_x;
+        return this.slot.position_x;
     }
 
     get positionY(): number {
-        return super.position_y;
+        return this.slot.position_y;
     }
 
     isTaken() {

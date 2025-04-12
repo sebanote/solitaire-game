@@ -1,14 +1,42 @@
 import globals from "globals";
 import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import tsPlugin from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 import pluginReact from "eslint-plugin-react";
 
-
-/** @type {import('eslint').Linter.Config[]} */
-export default [
-  {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {languageOptions: { globals: globals.browser }},
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
-];
+export default {
+  files: ["src/**/*.{js,mjs,cjs,ts,jsx,tsx}", "app/**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+  ignores: [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/.next/**",
+    "**/public/**",
+    "jest.config.js"
+  ],
+  languageOptions: {
+    globals: {
+      ...globals.browser,
+      ...globals.jest
+    },
+    parser: tsParser,
+    parserOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      project: './tsconfig.json',
+      ecmaFeatures: {
+        jsx: true
+      }
+    }
+  },
+  plugins: {
+    "@typescript-eslint": tsPlugin,
+    react: pluginReact,
+  },
+  rules: {
+    ...pluginJs.configs.recommended.rules,
+    ...tsPlugin.configs.recommended.rules,
+    ...pluginReact.configs.recommended.rules,
+  },
+}

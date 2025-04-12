@@ -2,11 +2,8 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Home from '../../../app/page';
-import GameBoard from '../../../components/GameBoard';
 import { InitGame } from '../../../../domain/use-cases/init-game';
 import { UpdateGame } from '../../../../domain/use-cases/update-game';
-import { MakeMove } from '../../../../domain/use-cases/make-move';
-import { Move } from '../../../../domain/entities/move';
 
 jest.mock('../../../components/GameBoard', () => {
     return jest.fn(({ onSlotClick }) => (
