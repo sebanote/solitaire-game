@@ -9,11 +9,13 @@ import { Move } from '../../domain/entities/move';
 import { GenericSlot } from '../../domain/entities/slot';
 import { PlayableSlot } from '../../domain/entities/decorators/playableSlotDecorator';
 
+
 export default function Home() {
   const [slots, setSlots] = useState<Record<string, GenericSlot | PlayableSlot>>({});
   const [pins, setPins] = useState<number>(0);
   const [possibleMoves, setPossibleMoves] = useState<number>(0);
   const [moveFrom, setMoveFrom] = useState<string | null>(null); // Track the first click
+  const [finished, setFinished] = useState<boolean>(false);
 
   // Use `useRef` to persist the game instance across renders
   const gameRef = useRef<InitGame | null>(null);
@@ -47,18 +49,21 @@ export default function Home() {
     setSlots(newGame.game.getBoard.slots);
     setPins(newGame.game.getPins);
     setPossibleMoves(updateGame.updatePossibleMoves());
+    
   }, []);
+
+  useEffect(() => {
+    console.log('Finished state changed:', finished);
+  }, [finished]);
 
   const handleSlotClick = (row: number, col: number) => {
     const slotKey = `${row},${col}`;
     console.log(`Slot clicked: ${slotKey}`);
 
     if (!moveFrom) {
-      // First click: Save moveFrom coordinates
       setMoveFrom(slotKey);
       console.log(`Move From set to: ${slotKey}`);
     } else {
-      // Second click: Save moveTo coordinates and perform the move
       const moveTo = slotKey;
       console.log(`Move To set to: ${moveTo}`);
 
@@ -69,11 +74,12 @@ export default function Home() {
         );
 
         const updatedGame = newUpdate.updateTheGame();
-        setSlots(gameRef.current.game.getBoard.slots); // Update the slots state
-        setPins(gameRef.current.game.getPins); // Update the pins count
-        setPossibleMoves(gameRef.current.game.possibleMoves); // Update possible moves
-
-        console.log('Updated Game:', updatedGame);
+        console.log('Game update result:', updatedGame);
+        
+        setSlots({...gameRef.current.game.getBoard.slots}); // Force re-render with new object
+        setPins(gameRef.current.game.getPins);
+        setPossibleMoves(gameRef.current.game.possibleMoves);
+        setFinished(Boolean(updatedGame)); // Ensure boolean conversion
 
         // Reset moveFrom for the next move
         setMoveFrom(null);
@@ -86,6 +92,7 @@ export default function Home() {
       <h1>Solitaire Game</h1>
       <p>Pins Left: {pins}</p>
       <p>Possible Moves: {possibleMoves}</p>
+      <h2>Game Status: {finished ? "Game Over!" : "Game In Progress"}</h2>
       <GameBoard slots={slots} rows={7} cols={7} onSlotClick={handleSlotClick}  />
     </div>
   );

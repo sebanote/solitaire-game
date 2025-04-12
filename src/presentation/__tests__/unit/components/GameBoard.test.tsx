@@ -1,0 +1,98 @@
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import GameBoard from '../../../components/GameBoard';
+import { PlayableSlot } from '../../../../domain/entities/decorators/playableSlotDecorator';
+import { GenericSlot } from '../../../../domain/entities/slot';
+
+jest.mock('../../../../domain/entities/decorators/playableSlotDecorator', () => {
+    return{
+        PlayableSlot: jest.fn().mockImplementation((slot,taken) => {
+            return {
+                taken:taken,
+                isTaken: jest.fn().mockReturnValue(taken)
+            }
+        })
+    }
+});
+jest.mock('../../../../domain/entities/slot', () => {
+    return {
+        GenericSlot: jest.fn().mockImplementation((row, col) => {
+            return {
+                position_x: col,
+                position_y: row
+            }
+        })
+    }
+});
+
+describe('GameBoard Component', () => {
+    const mockOnSlotClick = jest.fn();
+
+    const createMockSlots = (rows: number, cols: number) => {
+        const slots: Record<string, GenericSlot | PlayableSlot> = {};
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                const key = `${row},${col}`;
+                slots[key] = new PlayableSlot(new GenericSlot(row,col),false); // All slots are initially not taken
+            }
+        }
+        return slots;
+    };
+
+    test('renders the correct number of slots', () => {
+        const rows = 3;
+        const cols = 3;
+        const slots = createMockSlots(rows, cols);
+
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+
+        const slotElements = screen.getAllByRole('button');
+        expect(slotElements).toHaveLength(rows * cols);
+    });
+
+    test('calls onSlotClick with correct row and column when a slot is clicked', () => {
+        const rows = 2;
+        const cols = 2;
+        const slots = createMockSlots(rows, cols);
+
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+
+        const slotElements = screen.getAllByRole('button');
+        fireEvent.click(slotElements[0]); // Click the first slot
+
+        expect(mockOnSlotClick).toHaveBeenCalledWith(0, 0);
+    });
+
+    test('renders slots with correct background color based on PlayableSlot state', () => {
+        const rows = 1;
+        const cols = 2;
+        const slots: Record<string, GenericSlot | PlayableSlot> = {
+            '0,0': new PlayableSlot(new GenericSlot(0,0),false), // Not taken
+            '0,1': new PlayableSlot(new GenericSlot(0,1),true),  // Taken
+        };
+
+        Object.setPrototypeOf(slots['0,0'], PlayableSlot.prototype)
+        Object.setPrototypeOf(slots['0,1'], PlayableSlot.prototype)
+
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+
+        const slotElements = screen.getAllByRole('button');
+        
+        expect(window.getComputedStyle(slotElements[0]).backgroundColor).toBe('red');
+        expect(window.getComputedStyle(slotElements[1]).backgroundColor).toBe('green');
+    });
+
+    test('renders empty slots with white background if not PlayableSlot', () => {
+        const rows = 1;
+        const cols = 1;
+        const slots: Record<string, GenericSlot | PlayableSlot> = {
+            '0,0': new GenericSlot(0,0), // Not a PlayableSlot
+        };
+
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+
+        const slotElement = screen.getByRole('button');
+        expect(window.getComputedStyle(slotElement).backgroundColor).toBe('white');
+    });
+});

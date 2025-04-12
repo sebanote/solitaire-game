@@ -250,13 +250,9 @@ describe('UpdateGame class', () => {
         const makeMove = new MakeMove(new Move('2,1', '0,1'), initGame.game.getBoard);
         const updateGame = new UpdateGame(initGame.game, makeMove);
         updateGame.updateAvailableMoves()
-        const boardArrangement = updateGame.updateTheGame();
+        const  gameFinished = updateGame.updateTheGame();
 
-        expect(boardArrangement).toEqual([
-            [true, true, true],
-            [true, false, true],
-            [true, false, true]
-        ]);
+        expect(gameFinished).toEqual(true);
         expect(initGame.game.getPins).toEqual(7);
         expect(updateGame.getGame.getMoves.length).toBe(1);
         expect(updateGame.getGame.getMoves[0].movingFrom).toBe('2,1');

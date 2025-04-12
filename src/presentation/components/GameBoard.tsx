@@ -34,7 +34,9 @@ const GameBoard: React.FC<GameBoardProps> = ({ slots, rows, cols, onSlotClick })
                     : 'red'
                   : 'white',
                 cursor: slot instanceof PlayableSlot ? 'pointer' : 'default',
+                
               }}
+              role='button'
             >
               {slot instanceof PlayableSlot ? (slot.isTaken() ? '●' : '○') : ''}
             </div>

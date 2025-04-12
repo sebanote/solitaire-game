@@ -84,31 +84,33 @@ export class UpdateGame {
         return allInvolvedSlots;
     }
 
-    updateTheGame(): Array<Array<null | boolean >> {
+    updateTheGame(): boolean {
         if(this.makeMove.isMoveAllowed()){
             this.addNewMove()
             this.updateBoard()
             this.removeOnePin()
             this.updateAvailableMoves(this.findAllInvolvedSlots())
             this.game.possibleMoves = this.updatePossibleMoves()
-            const boardArrangement = new Array(this.game.getBoard.getHeight).fill(null).map(() => new Array(this.game.getBoard.getWidth).fill(null));
+            
+            // const boardArrangement = new Array(this.game.getBoard.getHeight).fill(null).map(() => new Array(this.game.getBoard.getWidth).fill(null));
 
-            for (const slot of Object.keys(this.game.getBoard.slots)) {
-                const slotProps = this.game.getBoard.slots[slot];
-                const [row, col] = slot.split(',').map(Number); 
+            // for (const slot of Object.keys(this.game.getBoard.slots)) {
+            //     const slotProps = this.game.getBoard.slots[slot];
+            //     const [row, col] = slot.split(',').map(Number); 
 
-                if (slotProps instanceof PlayableSlot) {
-                    boardArrangement[row][col] = slotProps.isTaken();
-                } else {
-                    boardArrangement[row][col] = null;
-                }
-            }
-            return boardArrangement;
+            //     if (slotProps instanceof PlayableSlot) {
+            //         boardArrangement[row][col] = slotProps.isTaken();
+            //     } else {
+            //         boardArrangement[row][col] = null;
+            //     }
+            // }
+            // return boardArrangement;
         }
         else {
             console.log('invalid move...')
-            return []
         }
+
+        return this.isGameFinished()
     }
 
     updatePossibleMoves() {
