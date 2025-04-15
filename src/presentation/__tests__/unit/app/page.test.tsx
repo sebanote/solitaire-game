@@ -60,7 +60,7 @@ jest.mock('../../../components/GameBoard', () => ({
     default: ({ slots, onSlotClick }: { slots: SlotsType; onSlotClick: OnSlotClickType }) => (
         <div data-testid="game-board">
             {Object.keys(slots).map((key) => (
-                <div key={key} data-testid={`slot-${key}`} onClick={() => onSlotClick(...key.split(',').map(Number))}></div>
+                <div key={key} data-testid={`slot-${key}`} onClick={() => onSlotClick(...(key.split(',').map(Number) as [number, number]))}></div>
             ))}
         </div>
     ),
