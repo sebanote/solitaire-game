@@ -26,7 +26,7 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: npm test
+        run: npm test --experimental-vm-modules
 
       # Build the backend
       - name: Build backend
