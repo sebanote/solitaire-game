@@ -2,10 +2,6 @@
 import OpenAI from 'openai';
 import 'dotenv/config'
 
-// Verify environment variables are loaded
-console.log('Environment variables loaded:', process.env.OPENAI_API_KEY);
-
-console.log(process.env)
 
 export class OpenAiService {
   private openai: OpenAI;
@@ -22,7 +18,7 @@ export class OpenAiService {
     The board should be 7x7 with null for empty spaces and true/false for pins/holes.
     Response should be valid JSON array.
     Rules:
-    - Board must be symmetrical
+    - Board must be symmetrical please
     - Center should typically be false (empty)
     - Corners should be null
     - Response should only contain the array, no explanations`;

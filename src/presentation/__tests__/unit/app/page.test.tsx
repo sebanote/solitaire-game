@@ -43,12 +43,12 @@ jest.mock('../../../../domain/use-cases/update-game', () => {
 
 jest.mock('../../../../domain/use-cases/make-move', () => {
     return {
-        MakeMove: jest.fn().mockImplementation(() => {
-            return {
-                execute: jest.fn(),
-            };
-        }),
-    };
+        MakeMove: jest.fn().mockImplementation(() => ({
+          isMoveAllowed: jest.fn(),
+          findMidSlot: jest.fn(),
+          performMove: jest.fn(),
+        }))
+    }
 });
 
 // Define types for the props
@@ -82,11 +82,9 @@ globalThis.fetch = jest.fn(() =>
 ) as jest.Mock;
 
 describe('Home Component', () => {
-    let makeMoveSpy: jest.SpyInstance;
 
     beforeEach(() => {
         jest.clearAllMocks();
-        makeMoveSpy = jest.spyOn(MakeMove.prototype, 'constructor');
     });
 
     test('renders loading state initially', () => {
@@ -121,7 +119,7 @@ describe('Home Component', () => {
         expect(mockSlots['3,3'].taken).toBe(true);
 
         // Verify MakeMove instantiation
-        expect(makeMoveSpy).toHaveBeenCalled();
+        expect(MakeMove).toHaveBeenCalled();
     });
 
     test('displays "Game Over!" when finished', async () => {

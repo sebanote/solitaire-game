@@ -16,4 +16,4 @@ const config = {
   rootDir: '.',
 };
 
-export default config;
+module.exports = config;
