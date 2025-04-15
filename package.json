@@ -22,7 +22,8 @@
     "test:presentation:watch": "cd src/presentation && jest --config jest.config.presentation.js --watch",
     "lint": "npx eslint src/**",
     "prepare": "husky",
-    "dev:backend": "ts-node-dev --respawn src/index.ts"
+    "dev:backend": "ts-node-dev --respawn src/index.ts",
+    "build": "tsc"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
