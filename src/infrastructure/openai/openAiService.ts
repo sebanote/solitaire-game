@@ -2,10 +2,6 @@
 import OpenAI from 'openai';
 import 'dotenv/config'
 
-// Verify environment variables are loaded
-console.log('Environment variables loaded:', process.env.OPENAI_API_KEY);
-
-console.log(process.env)
 
 export class OpenAiService {
   private openai: OpenAI;
