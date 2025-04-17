@@ -18,11 +18,11 @@ const config = {
     "/node_modules/"
   ],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.{ts,tsx}',
-    '!**/node_modules/**',
-    '!**/*.d.ts',
-    '!**/coverage/**',
-    '!**/.next/**',
+    // '<rootDir>/src/**/*.{ts,tsx}',
+    // '!**/node_modules/**',
+    // '!**/*.d.ts',
+    // '!**/coverage/**',
+    // '!**/.next/**',
   ],
 };
 

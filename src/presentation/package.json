@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest --config jest.config.presentation.cjs --coverage"
+    "test": "jest --config jest.config.presentation.cjs"
   },
   "dependencies": {
     "next": "15.3.0",
