@@ -15,9 +15,15 @@ const config = {
   },
   rootDir: '.',
   testPathIgnorePatterns: [
-    "/node_modules/",
-    "<rootDir>/__tests__/unit/__mocks__/"
-  ]
+    "/node_modules/"
+  ],
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.{ts,tsx}',
+    '!**/node_modules/**',
+    '!**/*.d.ts',
+    '!**/coverage/**',
+    '!**/.next/**',
+  ],
 };
 
 module.exports = config;

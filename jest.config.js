@@ -15,13 +15,16 @@ module.exports = {
   maxWorkers: '50%',
   detectOpenHandles: true,
   forceExit: true,
-  collectCoverage: true,
+  collectCoverage: false,
   collectCoverageFrom: [
     'src/domain/**/*.ts',
+    'src/infrastructure/**/*.ts',
     'src/presentation/**/*.{ts,tsx}',
     '!**/node_modules/**',
-    '!**/*.d.ts'
+    '!**/*.d.ts',
+    '!src/presentation/.next'
   ],
+  moduleFileExtensions: ['ts', 'js'],
   coverageDirectory: '<rootDir>/coverage',
   coverageReporters: ['text', 'lcov'],
   coverageThreshold: {
@@ -32,10 +35,10 @@ module.exports = {
       statements: 80
     }
   },
-  watchPathIgnorePatterns: ['<rootDir>/node_modules/','/__mocks__/'],
+  watchPathIgnorePatterns: ['<rootDir>/node_modules/'],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
-    "<rootDir>/src/presentation/__tests__/unit/__mocks__/"// Ignore the presentation folder
+    "<rootDir>/src/presentation/"
   ],
   watchPlugins: [
     'jest-watch-typeahead/filename',

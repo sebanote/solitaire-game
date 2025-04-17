@@ -8,9 +8,14 @@ export class OpenAiService {
 
   constructor() {
     const openAiKey  = process.env.OPENAI_API_KEY
+
     this.openai = new OpenAI({
       apiKey: openAiKey,
     });
+    
+    if(!this.openai)
+      throw 'OpenAi Service was not initialized'
+    
   }
 
   async generateLevel(): Promise<(boolean | null)[][]> {

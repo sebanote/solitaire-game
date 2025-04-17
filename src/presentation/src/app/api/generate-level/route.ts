@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { GenerateLevel } from '../../../../domain/use-cases/generate-level'; 
+import { GenerateLevel } from '../../../../../domain/use-cases/generate-level'; 
 
 export async function GET() {
   try {

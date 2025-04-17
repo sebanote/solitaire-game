@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import GameBoard from '../components/GameBoard';
-import { InitGame } from '../../domain/use-cases/init-game';
-import { MakeMove } from '../../domain/use-cases/make-move';
-import { UpdateGame } from '../../domain/use-cases/update-game';
-import { Move } from '../../domain/entities/move';
-import { GenericSlot } from '../../domain/entities/slot';
-import { PlayableSlot } from '../../domain/entities/decorators/playableSlotDecorator';
+import { InitGame } from '../../../domain/use-cases/init-game';
+import { MakeMove } from '../../../domain/use-cases/make-move';
+import { UpdateGame } from '../../../domain/use-cases/update-game';
+import { Move } from '../../../domain/entities/move';
+import { GenericSlot } from '../../../domain/entities/slot';
+import { PlayableSlot } from '../../../domain/entities/decorators/playableSlotDecorator';
 
 export default function Home() {
   const [slots, setSlots] = useState<Record<string, GenericSlot | PlayableSlot>>({});

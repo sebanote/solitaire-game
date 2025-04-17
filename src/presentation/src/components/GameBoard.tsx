@@ -1,6 +1,6 @@
 import React from 'react';
-import { GenericSlot } from '../../domain/entities/slot';
-import { PlayableSlot } from '../../domain/entities/decorators/playableSlotDecorator';
+import { GenericSlot } from '../../../domain/entities/slot';
+import { PlayableSlot } from '../../../domain/entities/decorators/playableSlotDecorator';
 import styles from '../styles/GameBoard.module.scss'; // Import SCSS module
 
 interface GameBoardProps {
