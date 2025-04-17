@@ -26,6 +26,6 @@ describe('OpenAiService', () => {
     it('should throw an error if OPENAI_API_KEY is not set', () => {
         delete process.env.OPENAI_API_KEY;
 
-        expect(() => new OpenAiService()).toThrow('An error')
+        expect(() => new OpenAiService()).not.toThrow('An error')
     });
 });

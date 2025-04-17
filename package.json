@@ -15,9 +15,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest && cd src/presentation --coverage && jest --config jest.config.presentation.cjs",
+    "test": "jest && cd src/presentation && jest --config jest.config.presentation.cjs",
     "test:domain": "jest --coverage",
     "test:presentation": "cd src/presentation && jest --config jest.config.presentation.cjs --coverage",
+    "test:precommit": "jest --coverage && cd src/presentation && jest --config jest.config.presentation.cjs --coverage",
     "lint": "npx eslint src/**",
     "prepare": "husky",
     "dev:backend": "ts-node-dev --respawn src/index.ts",
