@@ -14,7 +14,7 @@ describe('OpenAiService', () => {
         process.env = originalEnv;
     });
 
-    it('should initialize OpenAI with the API key from environment variables', () => {
+    test('should initialize OpenAI with the API key from environment variables', () => {
         const mockApiKey = 'test-api-key';
         process.env.OPENAI_API_KEY = mockApiKey;
 
@@ -23,7 +23,7 @@ describe('OpenAiService', () => {
         expect(OpenAI).toHaveBeenCalledWith({ apiKey: mockApiKey });
     });
 
-    it('should throw an error if OPENAI_API_KEY is not set', () => {
+    test('should throw an error if OPENAI_API_KEY is not set', () => {
         delete process.env.OPENAI_API_KEY;
 
         expect(() => new OpenAiService()).not.toThrow('An error')
