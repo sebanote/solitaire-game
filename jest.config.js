@@ -17,12 +17,10 @@ module.exports = {
   forceExit: true,
   collectCoverage: false,
   collectCoverageFrom: [
-    'src/domain/**/*.ts',
-    'src/infrastructure/**/*.ts',
-    'src/presentation/**/*.{ts,tsx}',
+    'src/**/*.ts',
+    '!src/presentation/**',
     '!**/node_modules/**',
-    '!**/*.d.ts',
-    '!src/presentation/.next'
+    '!**/*.d.ts'
   ],
   moduleFileExtensions: ['ts', 'js'],
   coverageDirectory: '<rootDir>/coverage',
