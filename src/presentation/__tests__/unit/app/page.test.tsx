@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 import Home from '../../../app/page';
 import { MakeMove } from '../../../../domain/use-cases/make-move';
 
+
 const mockSlots = {
     '1,3': { taken: true, id: '1,3' },
     '3,3': { taken: false, id: '3,3' },
@@ -87,9 +88,10 @@ describe('Home Component', () => {
         jest.clearAllMocks();
     });
 
-    test('renders loading state initially', () => {
+    test('renders loading state initially', async () => {
         render(<Home />);
-        expect(screen.getByText(/Generating new level.../i)).toBeInTheDocument();
+
+        await waitFor(() => expect(screen.getByText(/Generating new level.../i)).toBeInTheDocument());
     });
 
     test('renders game board after initialization', async () => {
@@ -115,11 +117,13 @@ describe('Home Component', () => {
         fireEvent.click(slot13);
         fireEvent.click(slot33);
 
-        expect(mockSlots['1,3'].taken).toBe(false);
-        expect(mockSlots['3,3'].taken).toBe(true);
+        await waitFor(() => {
+          expect(mockSlots['1,3'].taken).toBe(false);
+          expect(mockSlots['3,3'].taken).toBe(true);
 
-        // Verify MakeMove instantiation
-        expect(MakeMove).toHaveBeenCalled();
+          // Verify MakeMove instantiation
+          expect(MakeMove).toHaveBeenCalled();
+        });
     });
 
     test('displays "Game Over!" when finished', async () => {

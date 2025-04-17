@@ -26,6 +26,16 @@ jest.mock('../../../../domain/entities/slot', () => {
     }
 });
 
+
+jest.mock('../../../styles/GameBoard.module.scss', () => (
+    {
+        'slot': 'slot',
+        'slot-taken': 'slot-taken',
+        'slot-available': 'slot-available'
+    }
+));
+
+
 describe('GameBoard Component', () => {
     const mockOnSlotClick = jest.fn();
 
@@ -68,19 +78,22 @@ describe('GameBoard Component', () => {
         const rows = 1;
         const cols = 2;
         const slots: Record<string, GenericSlot | PlayableSlot> = {
-            '0,0': new PlayableSlot(new GenericSlot(0,0),false), // Not taken
-            '0,1': new PlayableSlot(new GenericSlot(0,1),true),  // Taken
+            '0,0': new PlayableSlot(new GenericSlot(0, 0), false), // Not taken
+            '0,1': new PlayableSlot(new GenericSlot(0, 1), true),  // Taken
         };
 
-        Object.setPrototypeOf(slots['0,0'], PlayableSlot.prototype)
-        Object.setPrototypeOf(slots['0,1'], PlayableSlot.prototype)
+        Object.setPrototypeOf(slots['0,0'], PlayableSlot.prototype);
+        Object.setPrototypeOf(slots['0,1'], PlayableSlot.prototype);
+
+        
 
         render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
 
         const slotElements = screen.getAllByRole('button');
-        
-        expect(window.getComputedStyle(slotElements[0]).backgroundColor).toBe('red');
-        expect(window.getComputedStyle(slotElements[1]).backgroundColor).toBe('green');
+
+        // Ensure className is correctly assigned
+        expect(slotElements[0].className).toContain('slot-available');
+        expect(slotElements[1].className).toContain('slot-taken');
     });
 
     test('renders empty slots with white background if not PlayableSlot', () => {
@@ -93,6 +106,10 @@ describe('GameBoard Component', () => {
         render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
 
         const slotElement = screen.getByRole('button');
-        expect(window.getComputedStyle(slotElement).backgroundColor).toBe('white');
+
+         // Ensure className is correctly assigned
+        expect(slotElement.className).toContain('slot');
+        expect(slotElement.className).not.toContain('slot-available'); 
+        expect(slotElement.className).not.toContain('slot-taken');  
     });
 });
