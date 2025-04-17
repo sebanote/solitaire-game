@@ -19,6 +19,6 @@
       }
     ]
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/unit/src/infrastructure/openai/openAiService.test.ts"],
   "exclude": ["node_modules"]
 }

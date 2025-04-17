@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import GameBoard from '../../../components/GameBoard';
+import GameBoard from '../../../src/components/GameBoard';
 import { PlayableSlot } from '../../../../domain/entities/decorators/playableSlotDecorator';
 import { GenericSlot } from '../../../../domain/entities/slot';
 
@@ -27,7 +27,7 @@ jest.mock('../../../../domain/entities/slot', () => {
 });
 
 
-jest.mock('../../../styles/GameBoard.module.scss', () => (
+jest.mock('../../../src/styles/GameBoard.module.scss', () => (
     {
         'slot': 'slot',
         'slot-taken': 'slot-taken',

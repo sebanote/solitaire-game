@@ -15,11 +15,9 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "jest --config jest.config.src.js --coverage && cd src/presentation && jest --config jest.config.presentation.cjs --coverage",
-    "test:domain": "jest --config jest.config.src.js --coverage",
+    "test": "jest && cd src/presentation --coverage && jest --config jest.config.presentation.cjs",
+    "test:domain": "jest --coverage",
     "test:presentation": "cd src/presentation && jest --config jest.config.presentation.cjs --coverage",
-    "test:watch": "jest --config jest.config.src.js --watch",
-    "test:presentation:watch": "cd src/presentation && jest --config jest.config.presentation.cjs --watch",
     "lint": "npx eslint src/**",
     "prepare": "husky",
     "dev:backend": "ts-node-dev --respawn src/index.ts",

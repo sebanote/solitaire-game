@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Home from '../../../app/page';
+import Home from '../../../src/app/page';
 import { MakeMove } from '../../../../domain/use-cases/make-move';
 
 
@@ -56,7 +56,7 @@ jest.mock('../../../../domain/use-cases/make-move', () => {
 type SlotsType = Record<string, { taken: boolean; id: string }>;
 type OnSlotClickType = (row: number, col: number) => void;
 
-jest.mock('../../../components/GameBoard', () => ({
+jest.mock('../../../src/components/GameBoard', () => ({
     __esModule: true,
     default: ({ slots, onSlotClick }: { slots: SlotsType; onSlotClick: OnSlotClickType }) => (
         <div data-testid="game-board">
