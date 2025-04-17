@@ -32,9 +32,14 @@ module.exports = {
       statements: 80
     }
   },
-  watchPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  watchPathIgnorePatterns: ['<rootDir>/node_modules/','/__mocks__/'],
+  testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    "<rootDir>/src/presentation/__tests__/unit/__mocks__/"// Ignore the presentation folder
+  ],
   watchPlugins: [
     'jest-watch-typeahead/filename',
     'jest-watch-typeahead/testname'
-  ]
+  ],
+  
 };

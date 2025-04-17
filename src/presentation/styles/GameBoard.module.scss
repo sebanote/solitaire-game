@@ -1,0 +1,29 @@
+$slot-size: 50px;
+
+.game-board {
+  display: grid;
+}
+
+.slot {
+  width: $slot-size;
+  height: $slot-size;
+  border: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &-taken {
+    background-color: green;
+    cursor: pointer;
+  }
+
+  &-available {
+    background-color: red;
+    cursor: pointer;
+  }
+
+  &:not(&-taken):not(&-available) {
+    background-color: white;
+    cursor: default;
+  }
+}
