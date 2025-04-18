@@ -26,8 +26,8 @@ jobs:
 
       # Run tests
       - name: Run tests
-        run: |
-          npm test
+        run:
+          npm test --colors
 
       # Build the backend
       - name: Build backend
