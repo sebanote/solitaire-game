@@ -27,7 +27,7 @@ jobs:
       # Run tests
       - name: Run tests
         run:
-          npm test --colors
+          FORCE_COLOR=1 npm test
 
       # Build the backend
       - name: Build backend
