@@ -1,6 +1,6 @@
 1. que el commit no pase si no hay suficiente test coverage
 2. que npm test no muestre coverage y corre todos los tests
-3. npm run test:domain muestre coverage
-4. npm run test:presentation muestre coverage
-5. cd src/presentation npm test muestra coverage
+3. npm run test:domain muestre coverage y corra solo los tests que estan en el __tests__ de mas afuera solamente
+4. npm run test:presentation muestre coverage y corra los tests que estan adentro de src/presentation solamente
+5. cd src/presentation >> npm test muestra coverage
 6. save en todos los files muetra test report en test results
