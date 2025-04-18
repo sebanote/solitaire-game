@@ -27,9 +27,7 @@ jobs:
       # Run tests
       - name: Run tests
         run: |
-          npx jest --config jest.config.src.js --coverage
-          cd src/presentation
-          npx jest --config jest.config.presentation.cjs --coverage
+          npm test
 
       # Build the backend
       - name: Build backend
