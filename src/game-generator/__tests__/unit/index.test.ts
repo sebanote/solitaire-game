@@ -20,7 +20,6 @@ jest.mock('../../gameGenerator', () => {
 describe('Game Generator API', () => {
     describe('POST /generate-game', () => {
         test('should generate a default game and return 200 status', async () => {
-            const mockConfig = { language:'es' };
 
             const response = await request(app)
                 .post('/generate-game')

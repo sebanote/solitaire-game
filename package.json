@@ -16,9 +16,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:domain": "COVERAGE=true jest --selectProjects domain",
-    "test:presentation": "COVERAGE=true jest --selectProjects presentation",
-    "test:game-generator": "COVERAGE=true jest --selectProjects game-generator",
+    "test:domain": "jest --selectProjects domain --coverage",
+    "test:presentation": "jest --selectProjects presentation --coverage",
+    "test:game-generator": "jest --selectProjects game-generator --coverage",
     "test:precommit": "npm run test:domain && npm run test:presentation && npm run test:game-generator",
     "lint": "npx eslint src/**",
     "prepare": "husky",
