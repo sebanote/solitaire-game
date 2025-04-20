@@ -50,6 +50,31 @@ module.exports = {
           statements: 80,
         }
       }
+    },
+    {
+      displayName: 'game-generator',
+      preset: 'ts-jest',
+      testEnvironment: 'node',
+      rootDir: 'src/game-generator',
+      testMatch: ['**/__tests__/**/*.test.ts?(x)'],
+      transform: {
+        '^.+\\.[tj]sx?$': ['ts-jest', { tsconfig: './tsconfig.json' }]
+      },
+      moduleFileExtensions: ['ts', 'js'],
+      collectCoverageFrom: [
+        '**/*.ts',
+        '!**/node_modules/**',
+        '!**/*.d.ts'
+      ],
+      coverageDirectory: '<rootDir>/../../coverage/game-generator',
+      coverageThreshold: {
+        global: {
+          branches: 80,
+          functions: 80,
+          lines: 80,
+          statements: 80
+        }
+      }
     }
   ]
 };
