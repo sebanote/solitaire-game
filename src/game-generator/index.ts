@@ -4,7 +4,7 @@ import express from 'express';
 import { GameGenerator } from './gameGenerator';
 
 const app = express();
-const gameGenerator = new GameGenerator();
+let gameGenerator: GameGenerator;
 
 app.use(express.json());
 
@@ -12,6 +12,12 @@ app.use(express.json());
 app.post('/generate-game', async (req, res) => {
     try {
         const config = req.body;
+
+        if (!config.language) {
+            throw new Error('Invalid request configuration');
+        }
+
+        gameGenerator = new GameGenerator();
 
         // Initialize openai session by getting the greetings message
         const defaultGame = await gameGenerator.generateGame(config.language);
@@ -42,3 +48,5 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Game Generator API is running on port ${PORT}`);
 });
+
+export default app;
