@@ -40,14 +40,12 @@ export class GameGenerator {
                 cross shaped 7x7 solitaire board, if you want anything different you can just ask. For example: I want 10 different levels 
                 from easier to harder using the classic board but you can start with fewer pins"`
                 
-                const aIGreeting = await this.openAIService.chat(greeting, null);
+                const aIGreeting = await this.openAIService.chat(greeting, this.previousId);
 
                 this.previousId = aIGreeting.id;
 
-                // Parse the AI response to extract the new arrangement
                 return aIGreeting;
             
-
         } catch (error) {
             console.error('Error generating game:', error);
             throw new Error('Failed to generate game.');

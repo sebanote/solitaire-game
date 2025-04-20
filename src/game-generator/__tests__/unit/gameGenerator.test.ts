@@ -15,7 +15,7 @@ describe('GameGenerator', () => {
     });
 
     describe('generateGame', () => {
-        it('should call OpenAIService.chat with the correct greeting message and return the AI response', async () => {
+        test('should call OpenAIService.chat with the correct greeting message and return the AI response', async () => {
             const mockResponse: ai_gen = {
                 id: '123',
                 text: 'Translated greeting message',
@@ -30,7 +30,7 @@ describe('GameGenerator', () => {
             expect(result).toEqual(mockResponse);
         });
 
-        it('should throw an error if OpenAIService.chat fails', async () => {
+        test('should throw an error if OpenAIService.chat fails', async () => {
             mockOpenAIService.chat.mockRejectedValue(new Error('Chat service error'));
 
             await expect(gameGenerator.generateGame('en')).rejects.toThrow('Failed to generate game');
@@ -38,7 +38,7 @@ describe('GameGenerator', () => {
     });
 
     describe('configGameThroughChat', () => {
-        it('should call OpenAIService.chat with the correct message and previousId, and return the AI response', async () => {
+        test('should call OpenAIService.chat with the correct message and previousId, and return the AI response', async () => {
             const mockResponse: ai_gen = {
                 id: '456',
                 text: 'Response to user message',
@@ -46,14 +46,16 @@ describe('GameGenerator', () => {
             };
             mockOpenAIService.chat.mockResolvedValue(mockResponse);
 
-            const message = 'Create a harder level';
-            const result = await gameGenerator.configGameThroughChat(message);
+            const result = await gameGenerator.configGameThroughChat('Create a harder level');
 
-            expect(mockOpenAIService.chat).toHaveBeenCalledWith(message, null);
+            expect(mockOpenAIService.chat).toHaveBeenCalledWith('Create a harder level', null);
             expect(result).toEqual(mockResponse);
+
+            await gameGenerator.configGameThroughChat('Create an even harder level');
+            expect(mockOpenAIService.chat).toHaveBeenCalledWith('Create an even harder level', '456');
         });
 
-        it('should update previousId after receiving a response', async () => {
+        test('should update previousId after receiving a response', async () => {
             const mockResponse: ai_gen = {
                 id: '789',
                 text: 'Another response',
@@ -62,10 +64,11 @@ describe('GameGenerator', () => {
             mockOpenAIService.chat.mockResolvedValue(mockResponse);
 
             await gameGenerator.configGameThroughChat('Another message');
+            expect(mockOpenAIService.chat).toHaveBeenCalledWith('Another message', null);
             expect(gameGenerator['previousId']).toBe('789');
         });
 
-        it('should throw an error if OpenAIService.chat fails', async () => {
+        test('should throw an error if OpenAIService.chat fails', async () => {
             mockOpenAIService.chat.mockRejectedValue(new Error('Chat service error'));
 
             await expect(gameGenerator.configGameThroughChat('Test message')).rejects.toThrow('Chat service error');
