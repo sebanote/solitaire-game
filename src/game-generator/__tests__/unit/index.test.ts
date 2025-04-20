@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../../index';
+import { Server } from 'http';
 
 jest.mock('../../gameGenerator', () => {
     return {
@@ -16,6 +17,25 @@ jest.mock('../../gameGenerator', () => {
       }))
     };
   });
+
+afterEach(() => {
+    jest.clearAllMocks(); // Clear all mocks after each test
+});
+let server: Server;
+
+afterAll(async () => {
+    jest.restoreAllMocks(); // Restore all mocks after all tests
+    if (server && server.close) {
+        await new Promise((resolve, reject) => {
+            server.close((err) => (err ? reject(err) : resolve(null)));
+        });
+    }
+});
+
+// Mock server initialization
+beforeAll(() => {
+    server = app.listen(); // Start the server and store the instance
+});
 
 describe('Game Generator API', () => {
     describe('POST /generate-game', () => {
