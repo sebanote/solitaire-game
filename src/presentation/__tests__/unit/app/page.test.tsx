@@ -140,4 +140,5 @@ describe('Home Component', () => {
 
         await waitFor(() => expect(screen.getByText(/Game Over!/i)).toBeInTheDocument());
     });
+
 });

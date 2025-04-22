@@ -17,6 +17,16 @@ export default function Home() {
   const [finished, setFinished] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const defaultArrangement = [
+    [null, null, true, true, true, null, null],
+    [null, null, true, true, true, null, null],
+    [true, true, true, true, true, true, true],
+    [true, true, true, false, true, true, true],
+    [true, true, true, true, true, true, true],
+    [null, null, true, true, true, null, null],
+    [null, null, true, true, true, null, null],
+  ];
+
   // Use `useRef` to persist the game instance across renders
   const gameRef = useRef<InitGame | null>(null);
   const updateGameRef = useRef<UpdateGame | null>(null);
@@ -38,23 +48,13 @@ export default function Home() {
         });
         let generatedGame = await res.json();
 
-        console.log('generated game', generatedGame)
-
         let arrangement: Array<Array<null | boolean>>;
 
-        if (generatedGame.error || generatedGame.arrangements.length == 0){
-          arrangement = [
-            [null, null, true, true, true, null, null],
-            [null, null, true, true, true, null, null],
-            [true, true, true, true, true, true, true],
-            [true, true, true, false, true, true, true],
-            [true, true, true, true, true, true, true],
-            [null, null, true, true, true, null, null],
-            [null, null, true, true, true, null, null],
-          ];
+        if(generatedGame.arrangements && generatedGame.arrangements.length > 0){
+          arrangement = generatedGame.arrangements
         }
         else {
-          arrangement = generatedGame.arrangements
+          arrangement = defaultArrangement;
         }
           
         const newGame = new InitGame(arrangement.length, arrangement[0].length, arrangement);
