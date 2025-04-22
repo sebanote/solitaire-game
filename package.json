@@ -18,7 +18,8 @@
     "test": "jest",
     "test:domain": "jest --selectProjects domain --coverage",
     "test:presentation": "jest --selectProjects presentation --coverage",
-    "test:precommit": "jest --selectProjects domain --coverage && jest --selectProjects presentation --coverage",
+    "test:game-generator": "jest --selectProjects game-generator --coverage",
+    "test:precommit": "npm run test:domain && npm run test:presentation && npm run test:game-generator",
     "lint": "npx eslint src/**",
     "prepare": "husky",
     "dev:backend": "ts-node-dev --respawn src/index.ts",
@@ -43,9 +44,6 @@
     "typescript-eslint": "^8.26.1"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
-    "express": "^5.1.0",
-    "openai": "^4.93.0"
+    "cors": "^2.8.5"
   }
 }
