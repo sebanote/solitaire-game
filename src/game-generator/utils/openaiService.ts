@@ -6,7 +6,7 @@ export class OpenAIService {
     private openai: OpenAI;
 
     constructor() {
-        this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEYfi });
+        this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
     }
     async chat(message: string, previousResponseId: string | null | undefined): Promise<ai_gen> {
         try {

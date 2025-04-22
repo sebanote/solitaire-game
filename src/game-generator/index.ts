@@ -1,7 +1,11 @@
-import 'dotenv/config';
-
+import dotenv from 'dotenv';
+import path from 'path';
 import express from 'express';
 import { GameGenerator } from './gameGenerator';
+
+dotenv.config({ path: path.resolve(__dirname, '.env') });
+
+console.log('OPENAI_API_KEY is:', process.env.OPENAI_API_KEY);
 
 const app = express();
 let gameGenerator: GameGenerator;
@@ -18,6 +22,8 @@ app.post('/generate-game', async (req, res) => {
         }
 
         gameGenerator = new GameGenerator();
+
+        console.log(`I am in the game-generator backend now, about to generateGame for ${config.language}`)
 
         // Initialize openai session by getting the greetings message
         const defaultGame = await gameGenerator.generateGame(config.language);

@@ -21,14 +21,28 @@ export default function Home() {
   const gameRef = useRef<InitGame | null>(null);
   const updateGameRef = useRef<UpdateGame | null>(null);
 
+  const getBrowserLanguage = () => {
+    return navigator.language || 'en-US';
+  };
+
   useEffect(() => {
     const initializeGame = async () => {
       setLoading(true);
-      try{
-        const res = await fetch('http://localhost:3001/api/generate-level');
-        let arrangement = await res.json();
+      try {
+        const res = await fetch('/api/generate-game', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ language: getBrowserLanguage() })
+        });
+        let generatedGame = await res.json();
 
-        if(arrangement.error)
+        console.log('generated game', generatedGame)
+
+        let arrangement: Array<Array<null | boolean>>;
+
+        if (generatedGame.error || generatedGame.arrangements.length == 0){
           arrangement = [
             [null, null, true, true, true, null, null],
             [null, null, true, true, true, null, null],
@@ -38,8 +52,12 @@ export default function Home() {
             [null, null, true, true, true, null, null],
             [null, null, true, true, true, null, null],
           ];
-
-        const newGame = new InitGame(7, 7, arrangement);
+        }
+        else {
+          arrangement = generatedGame.arrangements
+        }
+          
+        const newGame = new InitGame(arrangement.length, arrangement[0].length, arrangement);
         newGame.setBoard();
         newGame.fillInfluencedSlots();
 
@@ -54,7 +72,7 @@ export default function Home() {
         setPins(newGame.game.getPins);
         setPossibleMoves(updateGame.updatePossibleMoves());
       }
-      catch(e){
+      catch (e) {
         console.error('Error initializing game', e);
       }
       setLoading(false);
@@ -85,8 +103,8 @@ export default function Home() {
 
         const updatedGame = newUpdate.updateTheGame();
         console.log('Game update result:', updatedGame);
-        
-        setSlots({...gameRef.current.game.getBoard.slots}); // Force re-render with new object
+
+        setSlots({ ...gameRef.current.game.getBoard.slots }); // Force re-render with new object
         setPins(gameRef.current.game.getPins);
         setPossibleMoves(gameRef.current.game.possibleMoves);
         setFinished(Boolean(updatedGame)); // Ensure boolean conversion

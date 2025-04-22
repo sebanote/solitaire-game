@@ -70,15 +70,19 @@ jest.mock('../../../src/components/GameBoard', () => ({
 globalThis.fetch = jest.fn(() =>
     Promise.resolve({
         json: () =>
-            Promise.resolve([
-                [null, null, true, true, true, null, null],
-                [null, null, true, true, true, null, null],
-                [true, true, true, true, true, true, true],
-                [true, true, true, false, true, true, true],
-                [true, true, true, true, true, true, true],
-                [null, null, true, true, true, null, null],
-                [null, null, true, true, true, null, null],
-            ]),
+            Promise.resolve({
+              text: 'Mocked AI response',
+              arrangements: [
+                    [null, null, true, true, true, null, null],
+                    [null, null, true, true, true, null, null],
+                    [true, true, true, true, true, true, true],
+                    [true, true, true, false, true, true, true],
+                    [true, true, true, true, true, true, true],
+                    [null, null, true, true, true, null, null],
+                    [null, null, true, true, true, null, null],
+                ],
+              id: null
+            }),
     })
 ) as jest.Mock;
 
@@ -106,7 +110,7 @@ describe('Home Component', () => {
 
         render(<Home />);
         await waitFor(() => expect(screen.getByTestId('game-board')).toBeInTheDocument());
-
+        
         const slot13 = screen.getByTestId('slot-1,3');
         const slot33 = screen.getByTestId('slot-3,3');
 
