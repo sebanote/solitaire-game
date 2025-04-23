@@ -15,13 +15,13 @@ export class OpenAIService {
                 previous_response_id: previousResponseId,
                 input: message,
             });
-            
+
             const parsed = JSON.parse(response.output_text)
 
             const content: ai_gen = {
                 text: parsed.text,
                 arrangements: parsed.arrangements,
-                id: response.previous_response_id
+                id: response.id
             }
 
             if (!content) {

@@ -2,13 +2,13 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import GameBoard from '../components/GameBoard';
+import { ChatWindow } from '../components/ChatWindow';
 import { InitGame } from '../../../domain/use-cases/init-game';
 import { MakeMove } from '../../../domain/use-cases/make-move';
 import { UpdateGame } from '../../../domain/use-cases/update-game';
 import { Move } from '../../../domain/entities/move';
 import { GenericSlot } from '../../../domain/entities/slot';
 import { PlayableSlot } from '../../../domain/entities/decorators/playableSlotDecorator';
-import styles from '../styles/Chat.module.scss'
 
 export default function Home() {
   const [slots, setSlots] = useState<Record<string, GenericSlot | PlayableSlot>>({});
@@ -17,9 +17,8 @@ export default function Home() {
   const [moveFrom, setMoveFrom] = useState<string | null>(null); // Track the first click
   const [finished, setFinished] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Array<{ text: string; sender: 'user' | 'system' }>>([]);
-  const [newMessage, setNewMessage] = useState('');
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [greetingMessage, setGreetingMessage] = useState<string>(''); // Add this line
 
   const defaultArrangement = [
     [null, null, true, true, true, null, null],
@@ -51,6 +50,14 @@ export default function Home() {
           body: JSON.stringify({ language: getBrowserLanguage() })
         });
         let generatedGame = await res.json();
+
+        // Set the greeting message from the API response
+        if (generatedGame.text) {
+          setGreetingMessage(generatedGame.text);
+        }
+        else {
+          setGreetingMessage("Greeting message should be here...");
+        }
 
         let arrangement: Array<Array<null | boolean>>;
 
@@ -121,14 +128,6 @@ export default function Home() {
     }
   };
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newMessage.trim()) {
-      setMessages([...messages, { text: newMessage, sender: 'user' }]);
-      setNewMessage('');
-    }
-  };
-
   return (
     <div className="game-container">
       <div>
@@ -150,27 +149,7 @@ export default function Home() {
           </>
         )}
       </div>
-      <div className={styles['chat-window']}>
-        <div className={styles['chat-messages']}>
-          {messages.map((msg, index) => (
-            <div key={index} className={`${styles.message} ${styles[msg.sender]}`}>
-              <span className={styles['message-bubble']}>
-                {msg.text}
-              </span>
-            </div>
-          ))}
-        </div>
-        <form onSubmit={handleSendMessage} className={styles['chat-form']}>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type a message..."
-            className={styles['chat-input']}
-          />
-          <button type="submit" className={styles['chat-button']}>Send</button>
-        </form>
-      </div>
+      <ChatWindow initialMessage={greetingMessage} />
     </div>
   );
 }

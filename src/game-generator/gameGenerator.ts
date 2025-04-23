@@ -53,7 +53,17 @@ export class GameGenerator {
     }
 
     async configGameThroughChat(message:string):Promise<ai_gen>{
+        
         const aiResponse = await this.openAIService.chat(message, this.previousId);
+        // const aiResponse: ai_gen = {
+        //     text: 'this is a mocked response from AI',
+        //     id: '12121323',
+        //     arrangements: [[
+        //         [true,false,true],
+        //         [true,false,true],
+        //         [true,false,true],
+        //     ]]
+        // }
         this.previousId = aiResponse.id;
         return aiResponse;
     }
