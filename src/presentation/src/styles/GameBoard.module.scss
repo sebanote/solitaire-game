@@ -22,6 +22,11 @@ $slot-size: 50px;
     cursor: pointer;
   }
 
+  &-selected {
+    border: 2px solid yellow;
+    box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+  }
+
   &:not(&-taken):not(&-available) {
     background-color: white;
     cursor: default;

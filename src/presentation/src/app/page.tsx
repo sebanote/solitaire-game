@@ -8,6 +8,7 @@ import { UpdateGame } from '../../../domain/use-cases/update-game';
 import { Move } from '../../../domain/entities/move';
 import { GenericSlot } from '../../../domain/entities/slot';
 import { PlayableSlot } from '../../../domain/entities/decorators/playableSlotDecorator';
+import styles from '../styles/Chat.module.scss'
 
 export default function Home() {
   const [slots, setSlots] = useState<Record<string, GenericSlot | PlayableSlot>>({});
@@ -16,6 +17,9 @@ export default function Home() {
   const [moveFrom, setMoveFrom] = useState<string | null>(null); // Track the first click
   const [finished, setFinished] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Array<{ text: string; sender: 'user' | 'system' }>>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
 
   const defaultArrangement = [
     [null, null, true, true, true, null, null],
@@ -90,6 +94,7 @@ export default function Home() {
 
     if (!moveFrom) {
       setMoveFrom(slotKey);
+      setSelectedSlot(slotKey);
       console.log(`Move From set to: ${slotKey}`);
     } else {
       const moveTo = slotKey;
@@ -109,25 +114,63 @@ export default function Home() {
         setPossibleMoves(gameRef.current.game.possibleMoves);
         setFinished(Boolean(updatedGame)); // Ensure boolean conversion
 
-        // Reset moveFrom for the next move
+        // Reset both moveFrom and selectedSlot
         setMoveFrom(null);
+        setSelectedSlot(null);
       }
     }
   };
 
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newMessage.trim()) {
+      setMessages([...messages, { text: newMessage, sender: 'user' }]);
+      setNewMessage('');
+    }
+  };
+
   return (
-    <div>
-      <h1>Solitaire Game</h1>
-      {loading ? (
-        <p>Generating new level...</p>
-      ) : (
-        <>
-          <p>Pins Left: {pins}</p>
-          <p>Possible Moves: {possibleMoves}</p>
-          <h2>Game Status: {finished ? "Game Over!" : "Game In Progress"}</h2>
-          <GameBoard slots={slots} rows={7} cols={7} onSlotClick={handleSlotClick} />
-        </>
-      )}
+    <div className="game-container">
+      <div>
+        <h1>Solitaire Game</h1>
+        {loading ? (
+          <p>Generating new level...</p>
+        ) : (
+          <>
+            <p>Pins Left: {pins}</p>
+            <p>Possible Moves: {possibleMoves}</p>
+            <h2>Game Status: {finished ? "Game Over!" : "Game In Progress"}</h2>
+            <GameBoard 
+              slots={slots} 
+              rows={7} 
+              cols={7} 
+              onSlotClick={handleSlotClick} 
+              selectedSlot={selectedSlot}
+            />
+          </>
+        )}
+      </div>
+      <div className={styles['chat-window']}>
+        <div className={styles['chat-messages']}>
+          {messages.map((msg, index) => (
+            <div key={index} className={`${styles.message} ${styles[msg.sender]}`}>
+              <span className={styles['message-bubble']}>
+                {msg.text}
+              </span>
+            </div>
+          ))}
+        </div>
+        <form onSubmit={handleSendMessage} className={styles['chat-form']}>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type a message..."
+            className={styles['chat-input']}
+          />
+          <button type="submit" className={styles['chat-button']}>Send</button>
+        </form>
+      </div>
     </div>
   );
 }

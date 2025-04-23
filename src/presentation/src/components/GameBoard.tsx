@@ -8,9 +8,10 @@ interface GameBoardProps {
   rows: number;
   cols: number;
   onSlotClick: (row: number, col: number) => void;
+  selectedSlot: string | null;
 }
 
-const GameBoard: React.FC<GameBoardProps> = ({ slots, rows, cols, onSlotClick }) => {
+const GameBoard: React.FC<GameBoardProps> = ({ slots, rows, cols, onSlotClick, selectedSlot }) => {
   return (
     <div className={styles['game-board']} style={{ gridTemplateColumns: `repeat(${cols}, 50px)` }}>
       {Array.from({ length: rows }).map((_, rowIndex) =>
@@ -24,12 +25,13 @@ const GameBoard: React.FC<GameBoardProps> = ({ slots, rows, cols, onSlotClick })
               ? styles['slot-taken']
               : styles['slot-available']
             : '';
+          const selectedClass = selectedSlot === slotKey ? styles['slot-selected'] : '';
 
           return (
             <div
               key={slotKey}
               onClick={() => onSlotClick(rowIndex, colIndex)}
-              className={`${baseClass} ${playableClass}`}
+              className={`${baseClass} ${playableClass} ${selectedClass}`}
               role='button'
             >
               {slot instanceof PlayableSlot ? (slot.isTaken() ? '●' : '○') : ''}
