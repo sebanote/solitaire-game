@@ -7,8 +7,10 @@ describe('ChatWindow Component', () => {
     const mockFetch = jest.fn();
 
     beforeEach(() => {
-        global.fetch = mockFetch;
+        globalThis.fetch = mockFetch;
     });
+
+    
 
     afterEach(() => {
         jest.clearAllMocks();

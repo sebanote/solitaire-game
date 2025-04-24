@@ -19,6 +19,7 @@ export default function Home() {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
   const [greetingMessage, setGreetingMessage] = useState<string>(''); // Add this line
+  
 
   const defaultArrangement = [
     [null, null, true, true, true, null, null],
@@ -38,6 +39,23 @@ export default function Home() {
     return navigator.language || 'en-US';
   };
 
+  const initializeGameWithArrangement = (arrangement: Array<Array<boolean | null>>) => {
+    const newGame = new InitGame(arrangement.length, arrangement[0].length, arrangement);
+    newGame.setBoard();
+    newGame.fillInfluencedSlots();
+
+    const defaultMove = new MakeMove(new Move('0,0', '0,0'), newGame.game.getBoard);
+    const updateGame = new UpdateGame(newGame.game, defaultMove);
+    updateGame.updateAvailableMoves();
+
+    gameRef.current = newGame;
+    updateGameRef.current = updateGame;
+
+    setSlots(newGame.game.getBoard.slots);
+    setPins(newGame.game.getPins);
+    setPossibleMoves(updateGame.updatePossibleMoves());
+  };
+
   useEffect(() => {
     const initializeGame = async () => {
       setLoading(true);
@@ -51,37 +69,17 @@ export default function Home() {
         });
         let generatedGame = await res.json();
 
-        // Set the greeting message from the API response
         if (generatedGame.text) {
           setGreetingMessage(generatedGame.text);
-        }
-        else {
+        } else {
           setGreetingMessage("Greeting message should be here...");
         }
 
-        let arrangement: Array<Array<null | boolean>>;
+        let arrangement = generatedGame.arrangements && generatedGame.arrangements.length > 0
+          ? generatedGame.arrangements
+          : defaultArrangement;
 
-        if(generatedGame.arrangements && generatedGame.arrangements.length > 0){
-          arrangement = generatedGame.arrangements
-        }
-        else {
-          arrangement = defaultArrangement;
-        }
-          
-        const newGame = new InitGame(arrangement.length, arrangement[0].length, arrangement);
-        newGame.setBoard();
-        newGame.fillInfluencedSlots();
-
-        const defaultMove = new MakeMove(new Move('0,0', '0,0'), newGame.game.getBoard);
-        const updateGame = new UpdateGame(newGame.game, defaultMove);
-        updateGame.updateAvailableMoves();
-
-        gameRef.current = newGame;
-        updateGameRef.current = updateGame;
-
-        setSlots(newGame.game.getBoard.slots);
-        setPins(newGame.game.getPins);
-        setPossibleMoves(updateGame.updatePossibleMoves());
+        initializeGameWithArrangement(arrangement);
       }
       catch (e) {
         console.error('Error initializing game', e);
@@ -128,6 +126,14 @@ export default function Home() {
     }
   };
 
+  const handleGameBoardUpdate = (newArrangement: Array<Array<boolean | null>>) => {
+    console.log('Reinitializing game with new arrangement:', newArrangement);
+    initializeGameWithArrangement(newArrangement);
+    setMoveFrom(null);
+    setSelectedSlot(null);
+    setFinished(false);
+  };
+
   return (
     <div className="game-container">
       <div>
@@ -149,7 +155,10 @@ export default function Home() {
           </>
         )}
       </div>
-      <ChatWindow initialMessage={greetingMessage} />
+      <ChatWindow 
+        initialMessage={greetingMessage} 
+        onGameBoardUpdate={handleGameBoardUpdate} // Pass the handler to ChatWindow
+      />
     </div>
   );
 }
