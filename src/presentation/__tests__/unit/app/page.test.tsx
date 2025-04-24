@@ -10,6 +10,14 @@ const mockSlots = {
     '3,3': { taken: false, id: '3,3' },
 };
 
+jest.mock('../../../src/styles/Chat.module.scss', () => (
+  {
+      'slot': 'slot',
+      'slot-taken': 'slot-taken',
+      'slot-available': 'slot-available'
+  }
+));
+
 jest.mock('../../../../domain/use-cases/init-game', () => {
     return {
       InitGame: jest.fn().mockImplementation(() => {

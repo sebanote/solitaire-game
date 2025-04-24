@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from 'react';
 import GameBoard from '../components/GameBoard';
+import { ChatWindow } from '../components/ChatWindow';
 import { InitGame } from '../../../domain/use-cases/init-game';
 import { MakeMove } from '../../../domain/use-cases/make-move';
 import { UpdateGame } from '../../../domain/use-cases/update-game';
@@ -16,6 +17,8 @@ export default function Home() {
   const [moveFrom, setMoveFrom] = useState<string | null>(null); // Track the first click
   const [finished, setFinished] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  const [greetingMessage, setGreetingMessage] = useState<string>(''); // Add this line
 
   const defaultArrangement = [
     [null, null, true, true, true, null, null],
@@ -47,6 +50,14 @@ export default function Home() {
           body: JSON.stringify({ language: getBrowserLanguage() })
         });
         let generatedGame = await res.json();
+
+        // Set the greeting message from the API response
+        if (generatedGame.text) {
+          setGreetingMessage(generatedGame.text);
+        }
+        else {
+          setGreetingMessage("Greeting message should be here...");
+        }
 
         let arrangement: Array<Array<null | boolean>>;
 
@@ -90,6 +101,7 @@ export default function Home() {
 
     if (!moveFrom) {
       setMoveFrom(slotKey);
+      setSelectedSlot(slotKey);
       console.log(`Move From set to: ${slotKey}`);
     } else {
       const moveTo = slotKey;
@@ -109,25 +121,35 @@ export default function Home() {
         setPossibleMoves(gameRef.current.game.possibleMoves);
         setFinished(Boolean(updatedGame)); // Ensure boolean conversion
 
-        // Reset moveFrom for the next move
+        // Reset both moveFrom and selectedSlot
         setMoveFrom(null);
+        setSelectedSlot(null);
       }
     }
   };
 
   return (
-    <div>
-      <h1>Solitaire Game</h1>
-      {loading ? (
-        <p>Generating new level...</p>
-      ) : (
-        <>
-          <p>Pins Left: {pins}</p>
-          <p>Possible Moves: {possibleMoves}</p>
-          <h2>Game Status: {finished ? "Game Over!" : "Game In Progress"}</h2>
-          <GameBoard slots={slots} rows={7} cols={7} onSlotClick={handleSlotClick} />
-        </>
-      )}
+    <div className="game-container">
+      <div>
+        <h1>Solitaire Game</h1>
+        {loading ? (
+          <p>Generating new level...</p>
+        ) : (
+          <>
+            <p>Pins Left: {pins}</p>
+            <p>Possible Moves: {possibleMoves}</p>
+            <h2>Game Status: {finished ? "Game Over!" : "Game In Progress"}</h2>
+            <GameBoard 
+              slots={slots} 
+              rows={7} 
+              cols={7} 
+              onSlotClick={handleSlotClick} 
+              selectedSlot={selectedSlot}
+            />
+          </>
+        )}
+      </div>
+      <ChatWindow initialMessage={greetingMessage} />
     </div>
   );
 }

@@ -6,7 +6,7 @@ jest.mock('openai');
 
 describe('OpenAIService', () => {
     let openAIService: OpenAIService;
-    let mockCreateResponse: jest.MockedFunction<() => Promise<{ output_text: string; previous_response_id: string }>>;
+    let mockCreateResponse: jest.MockedFunction<() => Promise<{ output_text: string; id: string }>>;
 
     beforeEach(() => {
         mockCreateResponse = jest.fn();
@@ -22,16 +22,16 @@ describe('OpenAIService', () => {
         jest.clearAllMocks();
     });
 
-    it('should return parsed content when OpenAI responds successfully', async () => {
+    test('should return parsed content when OpenAI responds successfully', async () => {
         const mockResponse = {
             output_text: JSON.stringify({
                 text: 'Generated text',
-                arrangements: ['arrangement1', 'arrangement2'],
+                arrangements: [['arrangement1', 'arrangement2']],
             }),
-            previous_response_id: 'response-id-123',
+            id: 'response-id-123',
         };
 
-        mockCreateResponse.mockResolvedValue(mockResponse as { output_text: string; previous_response_id: string });
+        mockCreateResponse.mockResolvedValue(mockResponse as { output_text: string; id: string });
 
         const result = await openAIService.chat('Test message', null);
 
@@ -43,15 +43,15 @@ describe('OpenAIService', () => {
 
         expect(result).toEqual({
             text: 'Generated text',
-            arrangements: ['arrangement1', 'arrangement2'],
+            arrangements: [['arrangement1', 'arrangement2']],
             id: 'response-id-123',
         });
     });
 
-    it('should throw an error if OpenAI response is invalid', async () => {
+    test('should throw an error if OpenAI response is invalid', async () => {
         const mockResponse = {
             output_text: 'Invalid JSON',
-            previous_response_id: 'response-id-123',
+            id: 'response-id-123',
         };
 
         mockCreateResponse.mockResolvedValue(mockResponse);
@@ -67,8 +67,8 @@ describe('OpenAIService', () => {
         });
     });
 
-    it('should throw an error if OpenAI does not return a response', async () => {
-        mockCreateResponse.mockResolvedValue({ output_text: '', previous_response_id: '' });
+    test('should throw an error if OpenAI does not return a response', async () => {
+        mockCreateResponse.mockResolvedValue({ output_text: '', id: '' });
 
         await expect(openAIService.chat('Test message', null)).rejects.toThrow(
             'Failed to communicate with OpenAI.'
@@ -81,7 +81,7 @@ describe('OpenAIService', () => {
         });
     });
 
-    it('should log an error and throw if OpenAI throws an exception', async () => {
+    test('should log an error and throw if OpenAI throws an exception', async () => {
         const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
         mockCreateResponse.mockRejectedValue(new Error('OpenAI error'));
 

@@ -54,8 +54,9 @@ describe('GameBoard Component', () => {
         const rows = 3;
         const cols = 3;
         const slots = createMockSlots(rows, cols);
+        const selectedSlot = null;
 
-        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} selectedSlot={selectedSlot}/>);
 
         const slotElements = screen.getAllByRole('button');
         expect(slotElements).toHaveLength(rows * cols);
@@ -65,8 +66,9 @@ describe('GameBoard Component', () => {
         const rows = 2;
         const cols = 2;
         const slots = createMockSlots(rows, cols);
+        const selectedSlot = null;
 
-        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} selectedSlot={selectedSlot}/>);
 
         const slotElements = screen.getAllByRole('button');
         fireEvent.click(slotElements[0]); // Click the first slot
@@ -81,13 +83,14 @@ describe('GameBoard Component', () => {
             '0,0': new PlayableSlot(new GenericSlot(0, 0), false), // Not taken
             '0,1': new PlayableSlot(new GenericSlot(0, 1), true),  // Taken
         };
+        const selectedSlot = null;
 
         Object.setPrototypeOf(slots['0,0'], PlayableSlot.prototype);
         Object.setPrototypeOf(slots['0,1'], PlayableSlot.prototype);
 
         
 
-        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} selectedSlot={selectedSlot} />);
 
         const slotElements = screen.getAllByRole('button');
 
@@ -102,8 +105,9 @@ describe('GameBoard Component', () => {
         const slots: Record<string, GenericSlot | PlayableSlot> = {
             '0,0': new GenericSlot(0,0), // Not a PlayableSlot
         };
+        const selectedSlot = null;
 
-        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} />);
+        render(<GameBoard slots={slots} rows={rows} cols={cols} onSlotClick={mockOnSlotClick} selectedSlot={selectedSlot}/>);
 
         const slotElement = screen.getByRole('button');
 
