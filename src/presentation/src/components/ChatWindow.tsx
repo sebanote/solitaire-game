@@ -8,9 +8,10 @@ interface Message {
 
 export interface ChatWindowProps {
   initialMessage: string;
+  onGameBoardUpdate?: (arrangements: Array<Array<boolean | null>>) => void;
 }
 
-export const ChatWindow: React.FC<ChatWindowProps> = ({ initialMessage }) => {
+export const ChatWindow: React.FC<ChatWindowProps> = ({ initialMessage, onGameBoardUpdate }) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -62,6 +63,12 @@ export const ChatWindow: React.FC<ChatWindowProps> = ({ initialMessage }) => {
         throw new Error('Invalid response format');
       }
 
+      // Handle game board update first if arrangements are present
+      if (data.response.arrangements && onGameBoardUpdate) {
+        onGameBoardUpdate(data.response.arrangements);
+      }
+
+      // Add only the text response to chat history
       const aiMessage: Message = {
         text: data.response.text,
         isUser: false,

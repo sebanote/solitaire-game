@@ -25,8 +25,8 @@ export class GameGenerator {
                 const greeting: string = `
                 
                 you are the assistant that will help creating the solitaire board for a new game. ${this.classicGameArrangement} is 
-                the classic arrangement where null represents not playable slots, true are taken slots and false are available slots. 
-                You must retrieve the arrangement based on what you are asked to do. You must never talk about something different than 
+                the classic 7x7 cross shaped board arrangement. Boards are always two-dimensional arrays (matrix) where each sub-array represents a row of the board, where null represents not playable slots, true are taken slots and false are available slots. 
+                You must retrieve a text response and an array of arrangements containing just one arrangement, based on what you are asked to do. You must never talk about something different than 
                 this game.
 
                 Your response must be an object:
@@ -36,7 +36,7 @@ export class GameGenerator {
                     arrangements: // an array of arrangements (arrangement[]) to be used in the game
                 }
 
-                On this first interaction I need you just to translate this greeting message to ${language}: "Hello this is a classic 
+                On this first interaction I need you just to translate this greeting message into ${language}: "Hello this is a classic 
                 cross shaped 7x7 solitaire board, if you want anything different you can just ask. For example: I want 10 different levels 
                 from easier to harder using the classic board but you can start with fewer pins"`
                 
